@@ -1,8 +1,4 @@
-//
-// Created by jaime-vaquero on 2/10/23.
-//
-
-#ifndef ARQUIPROYECTO_PROGARGS_HPP
-#define ARQUIPROYECTO_PROGARGS_HPP
-
-#endif //ARQUIPROYECTO_PROGARGS_HPP
+#include <vector>
+#include <string>
+int analizeArgs(int numArgumentos, std::vector<std::string> argumentos);
+int open_file(std::string fileName);
