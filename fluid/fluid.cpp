@@ -1,16 +1,19 @@
-//
-// Created by jaime-vaquero on 2/10/23.
-//
+#include <iostream>
+#include <vector>
+#include <string>
+#include "../sim/progargs.hpp"
+int main(int argc, char* argv[]) {
+    std::vector<std::string> argumentos;
 
-#include "block.hpp"
-#include "particle.hpp"
+    // Recorremos argv y añadimos cada argumento al vector
+    for (int i = 1; i < argc; i++) {
+        argumentos.push_back(argv[i]);
+    }
 
-Block::Block(int i, int j, int k) {
-    m_i = i;
-    m_j = j;
-    m_k = k;
-}
-
-void Block::Add_particle(Particle particle) {
-    particles.push_back(particle);
+    for (int i=0; i<argumentos.size(); i++){
+        std::cout<<argumentos[i]<<",";
+    }
+    if (!analizeArgs(argc-1,argumentos)) std::cout<<"Bien!"<<std::endl;
+    // El código restante de tu programa aquí
+    return 0;
 }

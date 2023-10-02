@@ -1,6 +1,7 @@
 #include <iostream>
 #include "progargs.hpp"
 #include <fstream>
+
 int analizeArgs(int numArgumentos, std::vector argumentos){
     if (numArgumentos!=3){
         std::cerr<<"Error: Invalid number of arguments: " << numArgumentos << std:endl;
