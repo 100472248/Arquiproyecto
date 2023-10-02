@@ -1,36 +1,50 @@
 #include <iostream>
 #include "progargs.hpp"
 #include <fstream>
+#include <vector>
+#include <string>
+bool check_int(std::string argument) {
+    if (std::isdigit(argument[0]) || argument[0]=='-'){
+        for (int i = 1; i < argument.length(); i++) {
+            if (!std::isdigit(argument[i])) {
+                return false;
+            }
+        }
+        return true;
+    }
+    return false;
+}
 
-int analizeArgs(int numArgumentos, std::vector argumentos){
+bool open_file(std::string fileName){
+    std::ifstream fichero(fileName, std::ios::binary);
+    if (!fichero) {
+        return false;
+    }
+    fichero.close();
+    return true;
+}
+int analizeArgs(int numArgumentos, std::vector<std::string> argumentos){
     if (numArgumentos!=3){
-        std::cerr<<"Error: Invalid number of arguments: " << numArgumentos << std:endl;
+        std::cerr<<"Error: Invalid number of arguments: " << numArgumentos << std::endl;
         return -1;
     }
-    if (sizeof(argumentos[0])!=4){
-        std::cerr<<"Error: time steps must be numeric."<< std:endl;
-        return -2;
+    if (!check_int(argumentos[0])){
+        std::cerr<<"Error: time steps must be numeric."<< std::endl;
+        return -1;
     }
-    if (sizeof(argumentos[0])< 0){
-        std::cerr<<"Error: Invalid number of time steps."<< std:endl;
+    int iteraciones = std::stoi(argumentos[0]);
+    if (iteraciones <= 0){
+        std::cerr<<"Error: Invalid number of time steps."<< std::endl;
         return -2;
     }
     if (!open_file(argumentos[1])){
         std::cerr<<"Error: Cannot open "<<argumentos[1]<<" for reading"<<std::endl;
         return -3;
     }
-    if (!open_file(argumentos[1])){
-        std::cerr<<"Error: Cannot open "<<argumentos[1]<<" for reading"<<std::endl;
+    if (!open_file(argumentos[2])){
+        std::cerr<<"Error: Cannot open "<<argumentos[1]<<" for writing"<<std::endl;
         return -4;
     }
-}
-
-int open_file(std::string fileName){
-    std::fstream fstream(nombre_archivo, std::ios::binary);
-    if (!fstream) {
-        return -1;
-    }
-    fstream.close();
     return 0;
 }
 
