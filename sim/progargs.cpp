@@ -1,11 +1,12 @@
 
 
 #include "progargs.hpp"
+#include <iostream>
 #include <fstream>
 #include <vector>
 #include <string>
 bool check_int(std::string argument) {
-    if (std::isdigit(argument[0]) || argument[0]=='-'){
+    if ((std::isdigit(argument[0]) != 0) || argument[0]=='-'){
         for (int i = 1; i < argument.length(); i++) {
             if (!std::isdigit(argument[i])) {
                 return false;
@@ -16,7 +17,7 @@ bool check_int(std::string argument) {
     return false;
 }
 
-bool open_file(std::string fileName){
+bool open_file(const std::string& fileName){
     std::ifstream fichero(fileName, std::ios::binary);
     if (!fichero) {
         return false;
