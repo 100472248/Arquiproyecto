@@ -10,12 +10,12 @@
 #include "particle.hpp"
 
 class Block {
-private:
+  private:
     int m_i;
     int m_j;
     int m_k;
     std::vector<Particle> particles;
-public:
+  public:
     Block(int i, int j, int k);
     void Add_particle(Particle particle);
 };

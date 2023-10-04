@@ -5,11 +5,11 @@
 #include "particle.hpp"
 
 Block::Block(int i, int j, int k) {
-    m_i = i;
-    m_j = j;
-    m_k = k;
+  m_i = i;
+  m_j = j;
+  m_k = k;
 }
 
 void Block::Add_particle(Particle particle) {
-    particles.push_back(particle);
+  particles.push_back(particle);
 }

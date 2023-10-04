@@ -8,14 +8,14 @@
 #include <vector>
 
 class Particle {
-private:
+  private:
     int m_id;
     std::vector<double> m_position;
     std::vector<double> m_speed_gradient;
     std::vector<double> m_speed;
     std::vector<double> m_acceleration;
     double m_density;
-public:
+  public:
     Particle(int id, std::vector<double> position, std::vector<double> speed_gradient, std::vector<double> speed);
     void Set_acceleration(std::vector<double> acceleration);
     void Set_density(double density);
