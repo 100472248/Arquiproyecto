@@ -1,3 +1,0 @@
-/home/jaime-vaquero/CLionProjects/Arquiproyecto/cmake-build-debug/_deps/googletest-subbuild/CMakeFiles/googletest-populate.dir
-/home/jaime-vaquero/CLionProjects/Arquiproyecto/cmake-build-debug/_deps/googletest-subbuild/CMakeFiles/edit_cache.dir
-/home/jaime-vaquero/CLionProjects/Arquiproyecto/cmake-build-debug/_deps/googletest-subbuild/CMakeFiles/rebuild_cache.dir
