@@ -1,7 +1,6 @@
 //
 // Created by jaime-vaquero on 2/10/23.
 //
-
 #include "grid.hpp"
 #include "block.hpp"
 #include <vector>
@@ -23,5 +22,3 @@ void Grid::Generate_blocks(int nx, int ny, int nz) {
     }
   }
 }
-int main(){
-  return 0;}

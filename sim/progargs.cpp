@@ -1,5 +1,5 @@
-#include <iostream>
 #include "progargs.hpp"
+#include <iostream>
 #include <fstream>
 #include <vector>
 #include <string>
@@ -15,10 +15,12 @@ se sigue comparando, teniendo 2 bifurcaciones:
 */
 bool check_int(std::string argument) {
   if (std::isdigit(argument[0]) || argument[0]=='-'){
-    for (int i = 1; i < argument.length(); i++) {
-      if (!std::isdigit(argument[i])) {
-        return false;
-      }
+    int index = 0;
+    for (char c: argument) {
+      if (index > 0) {
+          if (!std::isdigit(c)) return false;
+        }
+      index ++;
     }
     return true;
   }
@@ -26,7 +28,7 @@ bool check_int(std::string argument) {
 }
 /*Funcion solo para abrir el fichero y comprobar que todo esta perfecto*/
 bool open_file(std::string fileName){
-  std::ifstream fichero(fileName, std::ios::binary);
+  std::fstream fichero(fileName, std::ios::binary);
   if (!fichero) {
     return false;
   }
