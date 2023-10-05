@@ -13,3 +13,10 @@ Block::Block(int i, int j, int k) {
 void Block::Add_particle(Particle particle) {
   particles.push_back(particle);
 }
+
+bool Block:: Exists_block(int px, int py, int pz){
+    if (m_i == px && m_j == py && m_k == pz){
+        return true;
+    }
+    return false;
+}

@@ -32,9 +32,6 @@
 *.app
 
 # Folder
-./idea*
-./build*
-cmake-build*
 _deps
 build
 .idea

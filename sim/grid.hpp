@@ -18,6 +18,7 @@ class Grid {
   public:
     Grid(int nx, int ny, int nz);
     void Generate_blocks(int nx, int ny, int nz);
+    Block Find_block(int px, int py, int pz);
 };
 
 /*
