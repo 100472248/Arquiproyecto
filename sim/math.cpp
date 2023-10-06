@@ -19,3 +19,11 @@ std::array<int,3> calc_n_blocks(double ppm){
   std::array<int,3> resultado = {n_x,n_y,n_z};
   return resultado;
 }
+
+std::array<int,3> calc_size_blocks(std::array<int,3> medidas_grid){
+    int sx = int(BMAX[0]-BMIN[0])/medidas_grid[0];
+    int sy = int(BMAX[1]-BMIN[1])/medidas_grid[1];
+    int sz = int(BMAX[2]-BMIN[2])/medidas_grid[2];
+    std::array<int,3> resultado = {sx, sy, sz};
+    return resultado;
+}

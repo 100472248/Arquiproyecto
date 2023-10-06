@@ -40,3 +40,13 @@ int Grid:: Find_block(int px, int py, int pz) {
         }
     }
     return -1;}
+
+void Grid::order_paricles_block(std::string filename, int np, int ppm, std::array<int,3> medidas_bloque) {
+    int bloque_actual = 0;
+    int contador = 0;
+    int particulas_por_cubo = (medidas_bloque[0]*ppm)*(medidas_bloque[1]*ppm)*(medidas_bloque[2]*ppm);
+    for (int i = 0; i < np; i++){
+
+    }
+}
+

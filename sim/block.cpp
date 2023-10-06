@@ -3,6 +3,7 @@
 //
 #include "block.hpp"
 #include "particle.hpp"
+#include "files.hpp"
 
 Block::Block(int i, int j, int k) {
   m_i = i;
@@ -20,3 +21,10 @@ bool Block:: Exists_block(int px, int py, int pz){
     }
     return false;
 }
+
+void Block::add_by_stats(int id, std::vector<double> pos, std::vector<double> gradient,
+                         std::vector<double> speed){
+    Particle particle(id, pos, gradient, speed);
+    particles.push_back(particle);
+}
+

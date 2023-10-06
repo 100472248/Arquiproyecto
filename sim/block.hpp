@@ -19,6 +19,7 @@ class Block {
     Block(int i, int j, int k);
     void Add_particle(Particle particle);
     bool Exists_block(int px, int py, int pz);
+    void add_by_stats(int id, std::vector<double> position, std::vector<double> gradiant, std::vector<double> speed);
 };
 
 #endif //ARQUIPROYECTO_BLOCK_HPP

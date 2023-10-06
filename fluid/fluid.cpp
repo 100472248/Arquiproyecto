@@ -15,5 +15,7 @@ int main(int argc, char* argv[]) {
   std::array<int,3> bloques;
   bloques = calc_n_blocks(datos_grid.ppm); ///Calculamos ppm de ese struct de datos de cabecera y almacenamos esos datos en el array bloques
   Grid grid(bloques[0],bloques[1],bloques[2]); ///Con el array bloques creamos el objeto 'grid'
+  std:: array<int, 3> medidas_bloque = calc_size_blocks(bloques);
+
   return 0;
 }

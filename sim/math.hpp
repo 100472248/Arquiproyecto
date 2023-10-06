@@ -11,5 +11,6 @@ double const D_P = 0.0002;
 double const DELTA_T = 0.003;
 double longitud_suavizado(double ppm);
 std::array<int,3> calc_n_blocks(double ppm);
+std::array<int, 3>calc_size_blocks(std::array<int,3> medidas_grid);
 #endif //ARQUIPROYECTO_MATH_HPP
 
