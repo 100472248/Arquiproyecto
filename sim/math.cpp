@@ -27,3 +27,11 @@ std::array<int,3> calc_size_blocks(std::array<int,3> medidas_grid){
     std::array<int,3> resultado = {sx, sy, sz};
     return resultado;
 }
+
+std::array<int, 3>posicion_particula(double px, double py, double pz, std::array<int,3> size_block){
+    int x = std::floor((px-BMIN[0])/size_block[0]);
+    int y = std::floor((py-BMIN[1])/size_block[1]);
+    int z = std::floor((pz-BMIN[2])/size_block[2]);
+    std::array<int,3> resultado = {x, y, z};
+    return resultado;
+}

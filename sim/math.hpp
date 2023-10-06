@@ -12,5 +12,6 @@ double const DELTA_T = 0.003;
 double longitud_suavizado(double ppm);
 std::array<int,3> calc_n_blocks(double ppm);
 std::array<int, 3>calc_size_blocks(std::array<int,3> medidas_grid);
+std::array<int, 3>posicion_particula(double px, double py, double pz, std::array<int,3> size_block);
 #endif //ARQUIPROYECTO_MATH_HPP
 

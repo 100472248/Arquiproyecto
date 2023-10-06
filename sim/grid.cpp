@@ -3,8 +3,10 @@
 //
 #include "grid.hpp"
 #include "block.hpp"
+#include "particle.hpp"
 #include <vector>
 #include <iostream>
+#include <array>
 
 Grid::Grid(int nx, int ny, int nz) {
   m_nx = nx;
@@ -24,12 +26,12 @@ void Grid::Generate_blocks(int nx, int ny, int nz) {
   }
 }
 
-int Grid:: Find_block(int px, int py, int pz) {
+int Grid::find_block(int px, int py, int pz) {
     // Encuentra si dadas unas constantes existe un bloque
     if (0 <= px && px <= m_nx) {
         if (0 <= py && py <= m_ny) {
             if (0 <= pz && pz <= m_nz) {
-                for (int i = 0; i < isdigit(bloques.size()); i++) {
+                for (int i = 0; i < int(bloques.size()); i++) {
                     Block bloque = bloques[i];
                     if (bloque.Exists_block(px, py, pz)) {
                         return i;
@@ -41,12 +43,6 @@ int Grid:: Find_block(int px, int py, int pz) {
     }
     return -1;}
 
-void Grid::order_paricles_block(std::string filename, int np, int ppm, std::array<int,3> medidas_bloque) {
-    int bloque_actual = 0;
-    int contador = 0;
-    int particulas_por_cubo = (medidas_bloque[0]*ppm)*(medidas_bloque[1]*ppm)*(medidas_bloque[2]*ppm);
-    for (int i = 0; i < np; i++){
-
-    }
+void Grid:: add_block_particle(int i, Particle &particle){
+    bloques[i].Add_particle(particle);
 }
-

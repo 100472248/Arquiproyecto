@@ -3,6 +3,7 @@
 
 #include <vector>
 #include "block.hpp"
+#include "particle.hpp"
 #include <iostream>
 #include <array>
 
@@ -18,8 +19,8 @@ class Grid {
   public:
     Grid(int nx, int ny, int nz);
     void Generate_blocks(int nx, int ny, int nz);
-    int Find_block(int px, int py, int pz);
-    void order_paricles_block(std:: string filename, int np, int ppm, std::array<int,3> medidas_bloque);
+    int find_block(int px, int py, int pz);
+    void add_block_particle(int i, Particle &particle);
 };
 
 /*
