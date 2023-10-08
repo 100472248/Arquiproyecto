@@ -4,6 +4,8 @@
 
 #include "particle.hpp"
 #include <vector>
+
+
 Particle::Particle(int id, std::vector<double> position, std::vector<double> speed_gradient, std::vector<double> speed) {
   m_id = id;
   m_position = position;

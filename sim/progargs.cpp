@@ -28,7 +28,7 @@ bool check_int(std::string argument) {
 }
 /*Funcion solo para abrir el fichero y comprobar que todo esta perfecto*/
 bool open_file(std::string fileName){
-  std::fstream fichero(fileName, std::ios::binary);
+  std::ifstream fichero(fileName, std::ios::binary);
   if (!fichero) {
     return false;
   }
