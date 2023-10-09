@@ -8,7 +8,7 @@
 #include <array>
 
 std::array<double,3> const BMAX = {0.065, 0.1, 0.065};
-std::array<double,3> const BMIN = {-0.065, -0.8, -0.065};
+std::array<double,3> const BMIN = {-0.065, -0.08, -0.065};
 
 class Grid {
   private:

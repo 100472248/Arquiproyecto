@@ -12,9 +12,7 @@ Block::Block(int i, int j, int k) {
 }
 
 void Block::Add_particle(Particle &particle) {
-  std::cout << "Okey Lets go add particle!" << std::endl;
   particles.push_back(particle);
-  std::cout << "Okey Lets go add particle sale?!" << std::endl;
 }
 
 bool Block:: Exists_block(int px, int py, int pz){

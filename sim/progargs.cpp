@@ -35,6 +35,13 @@ bool open_file(std::string fileName){
   fichero.close();
   return true;
 }
+
+int check_np(int np, int leidas) {
+    if (np != leidas) {
+        return -5;
+    }
+    return 0;
+}
 /*Trata de argumentos*/
 int analizeArgs(int numArgumentos, std::vector<std::string> argumentos){
   if (numArgumentos!=3){

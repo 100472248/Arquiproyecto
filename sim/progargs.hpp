@@ -7,5 +7,6 @@
 int analizeArgs(int numArgumentos, std::vector<std::string> argumentos);
 bool check_int(std::string argument);
 bool open_file(std::string fileName);
+int check_np(int np, int leidas);
 
 #endif
