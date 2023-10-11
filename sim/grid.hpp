@@ -21,6 +21,7 @@ class Grid {
     void Generate_blocks(int nx, int ny, int nz);
     int find_block(int px, int py, int pz);
     void add_block_particle(int i, Particle &particle);
+    std::vector<Block> find_adjacent_blocks(int i, int j, int k);
 };
 
 /*

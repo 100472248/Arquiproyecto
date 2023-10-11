@@ -43,6 +43,21 @@ int Grid::find_block(int px, int py, int pz) {
 }
 
 
-void Grid:: add_block_particle(int i, Particle &particle){
+void Grid::add_block_particle(int i, Particle &particle){
     bloques[i].Add_particle(particle);
+}
+
+std::vector<Block> Grid::find_adjacent_blocks(int i, int j, int k) {
+    std::vector<Block> adjacents;
+    for (int it = 0; it < static_cast<int>(bloques.size()); it++){
+      Block bloque = bloques[it];
+      int b_i, b_j, b_k;
+      b_i = bloque.get_i();
+      b_j = bloque.get_j();
+      b_k = bloque.get_k();
+      if ((abs(b_i - i) == 1 || abs(b_i) == 0) && (abs(b_j - j) == 1 || abs(b_j) == 0) && (abs(b_k - k) == 1 || abs(b_k) == 0)){
+        adjacents.push_back(bloque);
+      }
+    }
+    return adjacents;
 }

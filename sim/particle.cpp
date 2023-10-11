@@ -20,3 +20,7 @@ void Particle::Set_acceleration(std::vector<double> acceleration) {
 void Particle::Set_density(double density) {
   m_density = density;
 }
+
+void Particle::Set_mass(double mass){
+  m_mass = mass;
+}

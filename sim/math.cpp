@@ -39,3 +39,9 @@ std::array<int, 3>posicion_particula(double px, double py, double pz, std::array
     std::array<int,3> resultado = {x, y, z};
     return resultado;
 }
+
+double calc_masa (double ppm){
+    double masa = RO / pow(ppm,3);
+    std::cout << "Particle mass: "<< masa << std::endl;
+    return masa;
+}

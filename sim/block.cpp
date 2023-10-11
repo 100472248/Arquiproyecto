@@ -22,5 +22,18 @@ bool Block:: Exists_block(int px, int py, int pz){
     return false;
 }
 
+int Block::get_i(){
+    return m_i;
+}
+
+int Block::get_j(){
+    return m_i;
+}
+
+int Block::get_k(){
+    return m_i;
+}
+
+
 
 

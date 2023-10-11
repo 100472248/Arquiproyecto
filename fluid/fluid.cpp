@@ -18,7 +18,7 @@ int main(int argc, char* argv[]) {
   bloques = calc_n_blocks(datos_grid.ppm); ///Calculamos ppm de ese struct de datos de cabecera y almacenamos esos datos en el array bloques
   Grid grid(bloques[0],bloques[1],bloques[2]); ///Con el array bloques creamos el objeto 'grid'
   std:: array<double, 3> medidas_bloque = calc_size_blocks(bloques);
-  int id = Read_particles(argumentos[1], medidas_bloque, grid);
+  int id = Read_particles(argumentos[1], medidas_bloque, grid, datos_grid.ppm);
   retorno = check_np(datos_grid.np, id);
   if (retorno != 0) {
       return retorno;
