@@ -22,6 +22,6 @@ class Block {
     int get_i();
     int get_j();
     int get_k();
-}
+};
 
 #endif //ARQUIPROYECTO_BLOCK_HPP

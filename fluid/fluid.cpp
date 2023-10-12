@@ -6,8 +6,10 @@
 #include "../sim/math.hpp"
 #include "../sim/grid.hpp"
 #include "../sim/files.hpp"
+#include <chrono>
 
 int main(int argc, char* argv[]) {
+    auto start_time = std::chrono::high_resolution_clock::now();
   std::vector<std::string> argumentos;
   for (int i = 1; i < argc; i++) argumentos.push_back(argv[i]); ///Nos olvidamos del problema de punteros de argv pasandolo todo a un vector
   int retorno = analizeArgs(argc - 1, argumentos);
@@ -23,5 +25,10 @@ int main(int argc, char* argv[]) {
   if (retorno != 0) {
       return retorno;
   }
+  auto end_time = std::chrono::high_resolution_clock::now();
+  // Calcula la duración de la ejecución
+  auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
+  // Imprime el tiempo de ejecución en milisegundos
+  std::cout << "Tiempo de ejecución: " << duration.count() << " ms" << std::endl;
   return 0;
 }

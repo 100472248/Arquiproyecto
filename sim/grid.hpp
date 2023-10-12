@@ -21,12 +21,8 @@ class Grid {
     void Generate_blocks(int nx, int ny, int nz);
     int find_block(int px, int py, int pz);
     void add_block_particle(int i, Particle &particle);
-    std::vector<Block> find_adjacent_blocks(int i, int j, int k);
+    int find_block_2(int px, int py, int pz);
+    std::vector<int> find_adjacent_blocks (int px, int py, int pz);
 };
-
-/*
- *  std::vector<float> b_max{0.065, 0.1, 0.065};
-    std::vector<float> b_min{-0.065, -0.08, -0.065};
- */
 
 #endif //ARQUIPROYECTO_GRID_HPP

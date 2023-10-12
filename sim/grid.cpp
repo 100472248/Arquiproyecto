@@ -34,12 +34,17 @@ int Grid::find_block(int px, int py, int pz) {
   else if (py >= m_ny) { py = m_ny-1; }
   if (pz < 0) { pz = 0; }
   else if (pz >= m_nz) { pz = m_nz-1; }
-  for (int i = 0; i < static_cast<int>(bloques.size()); i++) {
-    Block bloque = bloques[i];
-    if (bloque.Exists_block(px, py, pz)) {
-        return i; }
-  }
-    return -1;
+  return px * (m_ny*m_nz) + py * (m_nz) + pz;
+}
+
+int Grid::find_block_2(int px, int py, int pz) {
+    if (px < 0 || px >= m_nx) {
+        return -1; }
+    if (py < 0 || py >= m_ny) {
+        return -1; }
+    if (pz < 0 || pz >= m_nz) {
+        return -1; }
+    return px * (m_ny*m_nz) + py * (m_nz) + pz;
 }
 
 
@@ -47,17 +52,25 @@ void Grid::add_block_particle(int i, Particle &particle){
     bloques[i].Add_particle(particle);
 }
 
-std::vector<Block> Grid::find_adjacent_blocks(int i, int j, int k) {
-    std::vector<Block> adjacents;
-    for (int it = 0; it < static_cast<int>(bloques.size()); it++){
-      Block bloque = bloques[it];
-      int b_i, b_j, b_k;
-      b_i = bloque.get_i();
-      b_j = bloque.get_j();
-      b_k = bloque.get_k();
-      if ((abs(b_i - i) == 1 || abs(b_i) == 0) && (abs(b_j - j) == 1 || abs(b_j) == 0) && (abs(b_k - k) == 1 || abs(b_k) == 0)){
-        adjacents.push_back(bloque);
-      }
+std::vector<int> Grid::find_adjacent_blocks(int px, int py, int pz) {
+    std::vector<int> adyacentes;
+    for (int i = -1; i <= 1; i++) {
+        for (int j = -1; j <= 1; j++) {
+            for (int k = -1; k <= 1; k++) {
+                int posicion = find_block_2(px + i, py + j, pz + k);
+                if (posicion != -1) {
+                    adyacentes.push_back(posicion);
+                }
+            }
+        }
     }
-    return adjacents;
+    return adyacentes;
 }
+
+
+/*
+bool Grid::is_adjacent(int b1_i, int b1_j, int b1_k, int b2_i, int b2_j, int b2_k) {
+    return ((abs(b2_i - b1_i) == 1 || abs(b2_i - b1_i) == 0) && (abs(b2_j - b1_j) == 1 || abs(b2_j - b1_j) == 0)
+    && (abs(b2_k - b1_k) == 1 || abs(b2_k - b1_k) == 0));
+}
+*/
