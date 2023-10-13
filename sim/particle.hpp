@@ -21,6 +21,8 @@ class Particle {
     void Set_acceleration(std::vector<double> acceleration);
     void Set_density(double density);
     void Set_mass(double mass);
+    std::vector<double>get_speed();
+    std::vector<double>get_position();
 };
 
 #endif //ARQUIPROYECTO_PARTICLE_HPP

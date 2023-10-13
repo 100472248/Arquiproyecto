@@ -2,6 +2,7 @@
 #define ARQUIPROYECTO_MATH_HPP
 #include <array>
 #include <numbers>
+#include "particle.hpp"
 double const R = 1.695;
 int const RO = 1000;
 double const PS = 3.0;
@@ -18,6 +19,6 @@ std::array<int, 3>posicion_particula(double px, double py, double pz, std::array
 double calc_masa (double ppm);
 double increase_density(double h, std::array <double, 3> pi, std::array <double, 3> pj);
 double transform_density(double h, double m, double Ri);
-
+double increase_aceleration(double h, Particle pi, Particle pj, double m);
 #endif //ARQUIPROYECTO_MATH_HPP
 
