@@ -28,7 +28,7 @@ struct Datos_cabecera read_header_file (std::string fileName){
   return resultado;
 }
 
-int Read_particles(std:: string filename, std:: array<double, 3> tamanio_bloque, Grid &malla, double ppm) {
+int Read_particles(std:: string filename, Grid &malla, double ppm) {
     double masa = calc_masa(ppm);
     //Lectura
     std::ifstream archivo(filename, std::ios::binary);
@@ -48,7 +48,7 @@ int Read_particles(std:: string filename, std:: array<double, 3> tamanio_bloque,
         archivo.read(reinterpret_cast<char *>(&vy), sizeof(float));
         archivo.read(reinterpret_cast<char *>(&vz), sizeof(float));
         std:: vector<double> speed = {static_cast<double>(vx), static_cast<double>(vy), static_cast<double>(vz)};
-        std:: array<int, 3> pos_particle = posicion_particula(px, py, pz, tamanio_bloque);
+        std:: array<int, 3> pos_particle = posicion_particula(px, py, pz, malla.get_block_size());
         int identificador = malla.find_block(pos_particle[0], pos_particle[1], pos_particle[2]);
         Particle particula(id, pos, gradient, speed);
         particula.Set_mass(masa);

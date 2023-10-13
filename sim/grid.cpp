@@ -4,6 +4,7 @@
 #include "grid.hpp"
 #include "block.hpp"
 #include "particle.hpp"
+#include "math.hpp"
 #include <vector>
 #include <iostream>
 #include <array>
@@ -47,9 +48,10 @@ int Grid::find_block_2(int px, int py, int pz) {
     return px * (m_ny*m_nz) + py * (m_nz) + pz;
 }
 
-
 void Grid::add_block_particle(int i, Particle &particle){
     bloques[i].Add_particle(particle);
+    std::array<int, 3> bloque = {bloques[i].get_i(), bloques[i].get_j(), bloques[i].get_k()};
+    particle.Set_bloque(bloque);
 }
 
 std::vector<int> Grid::find_adjacent_blocks(int px, int py, int pz) {
@@ -65,6 +67,42 @@ std::vector<int> Grid::find_adjacent_blocks(int px, int py, int pz) {
         }
     }
     return adyacentes;
+}
+
+void Grid::reposition_particles() {
+    for (int i = 0; i < static_cast<int>(bloques.size()); i++) {
+        int particles = bloques[i].get_particles_length();
+        for (int j = 0; j <particles; j++) {
+            if (bloques[i].needs_reset(j, get_block_size())) {
+                Particle particula = bloques[i].pop_particle(j);
+                std::vector<double> position_particle = particula.get_position();
+                std::array<int, 3> pos_particle = posicion_particula(position_particle[0], position_particle[1],
+                                                                      position_particle[2], get_block_size());
+                int identificador = find_block(pos_particle[0], pos_particle[1], pos_particle[2]);
+                add_block_particle(identificador, particula);
+            };
+        }
+    }
+}
+
+void Grid::calc_speedup() {
+
+}
+
+void Grid::simulation() {
+    reposition_particles();
+
+}
+
+
+
+std::array<double, 3> Grid::get_block_size() {
+    return m_block_size;
+}
+
+void Grid::set_block_size(std::array<double, 3> block_size) {
+    m_block_size = block_size;
+
 }
 
 

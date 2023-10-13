@@ -22,6 +22,9 @@ class Block {
     int get_i();
     int get_j();
     int get_k();
+    int get_particles_length();
+    bool needs_reset(int index, std::array<double, 3> m_block_size);
+    Particle pop_particle(int index);
 };
 
 #endif //ARQUIPROYECTO_BLOCK_HPP
