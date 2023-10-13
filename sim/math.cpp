@@ -3,6 +3,7 @@
 #include "math.hpp"
 #include "files.hpp"
 #include "grid.hpp"
+#include <numbers>
 /*Calculamos la longitud de suavizado. Notese que, h al ser una variable global declarada en el archivo header,
 mantendra su valor para siempre a lo largo del programa una vez esta funcion sea declarada (se presume que en principio,
 solo una vez)*/
@@ -45,3 +46,25 @@ double calc_masa (double ppm){
     std::cout << "Particle mass: "<< masa << std::endl;
     return masa;
 }
+
+double increase_density(double h, std::array <double, 3> pi, std::array <double, 3> pj) {
+    /*Incremento de las densidades*/
+    double h2 = pow(h, 2);
+    double resta_x = pi[0] - pj[0];
+    double resta_y = pi[1] - pj[1];
+    double resta_z = pi[2] - pj[2];
+    double v_abs = sqrt(pow(resta_x, 2) + pow(resta_y, 2) + pow(resta_z, 2));
+    double aumento = 0;
+    if (h2 > v_abs) {
+        aumento = pow(fabs(h2 - v_abs), 3);
+    }
+    return aumento;
+}
+double transform_density(double h, double m, double Ri){
+    /*Transformación de las densidad Ri*/
+    double h6 = pow(h, 6);
+    double h9 = pow(h, 9);
+    Ri = (Ri + h6)*(315*m)/(64*PI*h9);
+    return Ri;
+}
+
