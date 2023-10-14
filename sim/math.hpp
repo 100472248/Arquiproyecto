@@ -19,6 +19,8 @@ std::array<int, 3>posicion_particula(double px, double py, double pz, std::array
 double calc_masa (double ppm);
 double increase_density(double h, std::array <double, 3> pi, std::array <double, 3> pj);
 double transform_density(double h, double m, double Ri);
-double increase_aceleration(double h, Particle pi, Particle pj, double m);
+std::array<double, 3> increase_accerelation(std::array <double, 2> h_y_m , Particle pi, Particle pj,
+                                            std::array <double, 2> densidades);
+
 #endif //ARQUIPROYECTO_MATH_HPP
 

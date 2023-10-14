@@ -69,7 +69,9 @@ double transform_density(double h, double m, double Ri){
     return Ri;
 }
 
-double increase_aceleration(double h, Particle pi, Particle pj, double m){
+std::array<double, 3> increase_accerelation(std::array <double, 2> h_y_m , Particle pi, Particle pj,
+                                            std::array <double, 2> densidades){
+    double h = h_y_m[0];
     std::vector<double>posi = pi.get_position();
     std::vector<double>posj = pj.get_position();
     std::vector<double>vi = pi.get_speed();
@@ -79,11 +81,14 @@ double increase_aceleration(double h, Particle pi, Particle pj, double m){
     double resta_y = posi[1] - posj[1];
     double resta_z = posi[2] - posj[2];
     double v_abs = sqrt(pow(resta_x, 2) + pow(resta_y, 2) + pow(resta_z, 2));
-    double aumento = 0;
+    std::array<double, 3>  aumento = {0,0,0};
     if (h2 > v_abs) {
-        double maximo = std::max(v_abs, pow(10, -12));
+        double m = h_y_m[1];
+        double di = densidades[0];
+        double dj = densidades[1];
+        double maximo = sqrt(std::max(v_abs, pow(10, -12)));
         double h6 = pow(h, 6);
-        aumento = 0;
-    }
-    return aumento;
-}
+        aumento[0] = ((posi[0]-posj[0])*(15/(PI*h6))*1.5*m*PS*(pow(h-maximo, 2)/maximo)*(di+dj-2*RO) + (vi[0] + vj[0])*(45/(PI*h6))*m*MU)/(di + dj);
+        aumento[1] = ((posi[1]-posj[1])*(15/(PI*h6))*1.5*m*PS*(pow(h-maximo, 2)/maximo)*(di+dj-2*RO) + (vi[1] + vj[1])*(45/(PI*h6))*m*MU)/(di + dj);
+        aumento[2] = ((posi[2]-posj[2])*(15/(PI*h6))*1.5*m*PS*(pow(h-maximo, 2)/maximo)*(di+dj-2*RO) + (vi[2] + vj[2])*(45/(PI*h6))*m*MU)/(di + dj);}
+    return aumento;}
