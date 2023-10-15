@@ -17,7 +17,7 @@ void Particle::Set_bloque(std::array<int, 3> bloque) {
     m_bloque = bloque;
 }
 
-void Particle::Set_acceleration(std::vector<double> acceleration) {
+void Particle::Set_acceleration(std::array<double, 3> acceleration) {
   m_acceleration = acceleration;
 }
 
@@ -37,11 +37,24 @@ std::vector<double> Particle::get_position() {
     return m_position;
 }
 
+double Particle::get_mass() {
+    return m_mass;
+}
+
 std::vector<double> Particle:: get_speed(){
     std::vector<double> speed = {m_speed[0], m_speed[1], m_speed[2]};
     return speed;
 }
-std::vector<double> Particle:: get_position(){
-    std::vector<double> pos = {m_position[0], m_position[1], m_position[2]};
-    return pos;
+
+double Particle::update_density(double aumento) {
+    m_density += aumento;
+    return get_density();
+}
+
+double Particle::get_density() {
+    return m_density;
+}
+
+void Particle::update_acceleration(std::array<double, 3> aumento) {
+    m_acceleration = {m_acceleration[0] + aumento[0], m_acceleration[1] + aumento[1], m_acceleration[2] + aumento[2]};
 }

@@ -85,13 +85,81 @@ void Grid::reposition_particles() {
     }
 }
 
-void Grid::calc_speedup() {
-
+void Grid::initialize_acc_dens() {
+    for (int i = 0; i < static_cast<int>(bloques.size()); i++) {
+        bloques[i].initialize_acc_dens_block(G);
+    }
 }
 
-void Grid::simulation() {
-    reposition_particles();
+void Grid::calc_density(double ppm) {
+    for (int i = 0; i < static_cast<int>(bloques.size()); i++) {
+        std::vector<int> contiguos = find_adjacent_blocks(bloques[i].get_i(), bloques[i].get_j(),
+                                                          bloques[i].get_k());
+        for (int posicion_contiguo: contiguos) {
+            if (bloques[posicion_contiguo].get_checked()) {
+                break;
+            }
+            int longitud_particulas_bloque = bloques[i].get_particles_length();
+            int longitud_particulas_contiguo = bloques[posicion_contiguo].get_particles_length();
+            for (int b = 0; b < longitud_particulas_bloque; b++) {
+                std::vector<double> posicion_particula_bloque = bloques[i].get_particle_position(b);
+                for (int c = 0; c < longitud_particulas_contiguo; c++) {
+                    if (posicion_contiguo == i && b == c) {continue;}
+                    std::vector<double> posicion_particula_contiguo = bloques[posicion_contiguo].get_particle_position(c);
+                    double aumento = increase_density(ppm, posicion_particula_bloque, posicion_particula_contiguo);
+                    double densidad_bloque = bloques[i].update_particle_density(aumento, b);
+                    double densidad_contiguo = bloques[posicion_contiguo].update_particle_density(aumento, c);
+                    double transformacion_bloque = transform_density(ppm, densidad_bloque);
+                    double transformacion_contiguo = transform_density(ppm, densidad_contiguo);
+                    bloques[i].set_particle_density(transformacion_bloque, b);
+                    bloques[posicion_contiguo].set_particle_density(transformacion_contiguo, c);
+                }
+            }
+        }
+        bloques[i].set_checked(true);
+    }
+    uncheck();
+}
 
+void Grid::calc_acceleration(double ppm) {
+    for (int i = 0; i < static_cast<int>(bloques.size()); i++) {
+        std::vector<int> contiguos = find_adjacent_blocks(bloques[i].get_i(), bloques[i].get_j(),
+                                                          bloques[i].get_k());
+        for (int posicion_contiguo: contiguos) {
+            if (bloques[posicion_contiguo].get_checked()) {
+                break;
+            }
+            int longitud_particulas_bloque = bloques[i].get_particles_length();
+            int longitud_particulas_contiguo = bloques[posicion_contiguo].get_particles_length();
+            for (int b = 0; b < longitud_particulas_bloque; b++) {
+                std::vector<double> posicion_particula_bloque = bloques[i].get_particle_position(b);
+                for (int c = 0; c < longitud_particulas_contiguo; c++) {
+                    if (posicion_contiguo == i && b == c) {continue;}
+                    std::vector<double> posicion_particula_contiguo = bloques[posicion_contiguo].get_particle_position(c);
+                    // estas particulas son copias, no se estan actualizando
+                    Particle particula_bloque = bloques[i].get_particle(b);
+                    Particle particula_contiguo = bloques[posicion_contiguo].get_particle(c);
+                    std::array<double, 3> aumento = increase_accerelation(ppm, particula_bloque, particula_contiguo);
+                    bloques[i].update_particle_acceleration(aumento, b);
+                    aumento = {-aumento[0], -aumento[1], -aumento[2]};
+                    bloques[posicion_contiguo].update_particle_acceleration(aumento, c);
+                }
+            }
+        }
+        bloques[i].set_checked(true);
+    }
+    uncheck();
+}
+
+void Grid::simulation(int iteraciones, double ppm) {
+    for (int i = 0; i < iteraciones; i++) {
+        reposition_particles(); // 4.3.1
+        if (i == 0) {
+            initialize_acc_dens(); // 4.3.1.1
+        }
+        calc_density(ppm); // 4.3.1.2 - 4.3.1.3
+        calc_acceleration(ppm); // 4.3.1.4
+    }
 }
 
 
@@ -104,6 +172,14 @@ void Grid::set_block_size(std::array<double, 3> block_size) {
     m_block_size = block_size;
 
 }
+
+void Grid::uncheck() {
+    for (int i  = static_cast<int>(bloques.size()); i > 0; i--) {
+        bloques[i].set_checked(false);
+    }
+}
+
+
 
 
 /*

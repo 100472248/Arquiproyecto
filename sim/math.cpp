@@ -48,7 +48,8 @@ double calc_masa (double ppm){
     return masa;
 }
 
-double increase_density(double h, std::array <double, 3> pi, std::array <double, 3> pj) {
+double increase_density(double ppm, std::vector <double> pi, std::vector <double> pj) {
+    double h = longitud_suavizado(ppm);
     /*Incremento de las densidades*/
     double h2 = pow(h, 2);
     double resta_x = pi[0] - pj[0];
@@ -61,17 +62,19 @@ double increase_density(double h, std::array <double, 3> pi, std::array <double,
     }
     return aumento;
 }
-double transform_density(double h, double m, double Ri){
+double transform_density(double ppm, double Ri){
     /*Transformación de las densidad Ri*/
+    double h = longitud_suavizado(ppm);
+    double m = calc_masa(ppm);
     double h6 = pow(h, 6);
     double h9 = pow(h, 9);
     Ri = (Ri + h6)*(315*m)/(64*PI*h9);
     return Ri;
 }
 
-std::array<double, 3> increase_accerelation(std::array <double, 2> h_y_m , Particle pi, Particle pj,
-                                            std::array <double, 2> densidades){
-    double h = h_y_m[0];
+std::array<double, 3> increase_accerelation(double ppm, Particle pi, Particle pj) {
+    double h = longitud_suavizado(ppm);
+    double m = pi.get_mass();
     std::vector<double>posi = pi.get_position();
     std::vector<double>posj = pj.get_position();
     std::vector<double>vi = pi.get_speed();
@@ -83,9 +86,8 @@ std::array<double, 3> increase_accerelation(std::array <double, 2> h_y_m , Parti
     double v_abs = sqrt(pow(resta_x, 2) + pow(resta_y, 2) + pow(resta_z, 2));
     std::array<double, 3>  aumento = {0,0,0};
     if (h2 > v_abs) {
-        double m = h_y_m[1];
-        double di = densidades[0];
-        double dj = densidades[1];
+        double di = pi.get_density();
+        double dj = pj.get_density();
         double maximo = sqrt(std::max(v_abs, pow(10, -12)));
         double h6 = pow(h, 6);
         aumento[0] = ((posi[0]-posj[0])*(15/(PI*h6))*1.5*m*PS*(pow(h-maximo, 2)/maximo)*(di+dj-2*RO) + (vi[0] + vj[0])*(45/(PI*h6))*m*MU)/(di + dj);

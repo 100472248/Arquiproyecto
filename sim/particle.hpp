@@ -14,19 +14,23 @@ class Particle {
     std::vector<double> m_position;
     std::vector<double> m_speed_gradient;
     std::vector<double> m_speed;
-    std::vector<double> m_acceleration;
+    std::array<double, 3>  m_acceleration;
     double m_density;
     double m_mass;
     std::array<int, 3> m_bloque;
   public:
     Particle(int id, std::vector<double> position, std::vector<double> speed_gradient, std::vector<double> speed);
-    void Set_acceleration(std::vector<double> acceleration);
+    void Set_acceleration(std::array<double, 3> acceleration);
     void Set_density(double density);
     void Set_mass(double mass);
     void Set_bloque(std::array<int, 3> bloque);
     std::array<int, 3> get_bloque();
     std::vector<double> get_position();
     std::vector<double>get_speed();
+    double get_mass();
+    double get_density();
+    double update_density(double aumento);
+    void update_acceleration(std::array<double, 3> aumento);
 };
 
 #endif //ARQUIPROYECTO_PARTICLE_HPP

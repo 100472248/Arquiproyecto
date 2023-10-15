@@ -9,6 +9,7 @@
 
 std::array<double,3> const BMAX = {0.065, 0.1, 0.065};
 std::array<double,3> const BMIN = {-0.065, -0.08, -0.065};
+std::array<double, 3>const G = {0, -9.8, 0};
 
 class Grid {
   private:
@@ -25,10 +26,13 @@ class Grid {
     int find_block(int px, int py, int pz);
     void add_block_particle(int i, Particle &particle);
     int find_block_2(int px, int py, int pz);
+    void initialize_acc_dens();
     void reposition_particles();
-    void calc_speedup();
-    void simulation();
+    void calc_density(double ppm);
+    void calc_acceleration(double ppm);
+    void simulation(int iteraciones, double ppm);
     std::vector<int> find_adjacent_blocks (int px, int py, int pz);
+    void uncheck();
 
 };
 

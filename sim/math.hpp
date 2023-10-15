@@ -17,10 +17,9 @@ std::array<int,3> calc_n_blocks(double ppm);
 std::array<double, 3>calc_size_blocks(std::array<int,3> medidas_grid);
 std::array<int, 3>posicion_particula(double px, double py, double pz, std::array<double,3> size_block);
 double calc_masa (double ppm);
-double increase_density(double h, std::array <double, 3> pi, std::array <double, 3> pj);
-double transform_density(double h, double m, double Ri);
-std::array<double, 3> increase_accerelation(std::array <double, 2> h_y_m , Particle pi, Particle pj,
-                                            std::array <double, 2> densidades);
+double increase_density(double ppm, std::vector<double> pi, std::vector<double> pj);
+double transform_density(double ppm, double Ri);
+std::array<double, 3> increase_accerelation(double ppm, Particle pi, Particle pj) ;
 
 #endif //ARQUIPROYECTO_MATH_HPP
 

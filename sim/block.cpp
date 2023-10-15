@@ -56,5 +56,44 @@ Particle Block::pop_particle(int index) {
     return particle;
 }
 
+void Block::initialize_acc_dens_block(std::array<double, 3> g) {
+    for (int i = 0; i < static_cast<int>(particles.size()); i++) {
+        particles[i].Set_acceleration(g);
+        particles[i].Set_density(0);
+    }
+
+}
+
+std::vector<double> Block::get_particle_position(int pos) {
+    return particles[pos].get_position();
+}
+
+double Block::update_particle_density(double aumento, int pos) {
+    return particles[pos].update_density(aumento);
+}
+
+void Block::set_particle_density(double density, int pos) {
+    particles[pos].Set_density(density);
+}
+
+void Block::set_checked(bool valor) {
+    checked = valor;
+
+}
+
+bool Block::get_checked() {
+    return checked;
+}
+
+Particle Block::get_particle(int pos) {
+    Particle particula = particles[pos];
+    return particula;
+}
+
+void Block::update_particle_acceleration(std::array<double, 3> aumento, int pos) {
+    particles[pos].update_acceleration(aumento);
+
+}
+
 
 
