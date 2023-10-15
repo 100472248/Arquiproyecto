@@ -94,3 +94,43 @@ std::array<double, 3> increase_accerelation(double ppm, Particle pi, Particle pj
         aumento[1] = ((posi[1]-posj[1])*(15/(PI*h6))*1.5*m*PS*(pow(h-maximo, 2)/maximo)*(di+dj-2*RO) + (vi[1] + vj[1])*(45/(PI*h6))*m*MU)/(di + dj);
         aumento[2] = ((posi[2]-posj[2])*(15/(PI*h6))*1.5*m*PS*(pow(h-maximo, 2)/maximo)*(di+dj-2*RO) + (vi[2] + vj[2])*(45/(PI*h6))*m*MU)/(di + dj);}
     return aumento;}
+
+
+std::array<double, 3> new_position_x_y_z(std::vector<double> position_part, std::vector<double> speed_gradient_part){
+    double x = position_part[0]+ speed_gradient_part[0] * DELTA_T;
+    double y = position_part[1]+ speed_gradient_part[1] * DELTA_T;
+    double z = position_part[2]+ speed_gradient_part[2] * DELTA_T;
+    std::array<double, 3> new_position_x_y_z = {x, y, z};
+    return new_position_x_y_z;
+}
+
+void update_acceleration(std::array<double, 3> new_positions, Particle &particle, Grid &grid) {
+    std::vector<double> position_part       = particle.get_position();
+    std::array<int, 3> block_part           = particle.get_bloque();
+    std::vector<double> speed_part          = particle.get_speed();
+    std::array<double, 3> acceleration_part = particle.get_acceleration();
+    std::array<double, 3> grid_size         = grid.get_grid_size();
+    double delta                            = 0;
+
+    for (int it = 0; it < 3; it++) {
+        delta = 0;
+        if (block_part[it] == 0) {
+          delta = D_P - (new_positions[it] - BMIN[it]);
+        } else if (block_part[it] == grid_size[it] - 1) {
+          delta = D_P - (BMAX[it] - new_positions[it]);
+        }
+        if (delta > pow(10, -10)) {
+          if (block_part[it] == 0) {
+            acceleration_part[it] = acceleration_part[it] + (S_C * delta - D_V * speed_part[it]);
+          } else if (block_part[it] == grid_size[it] - 1) {
+            acceleration_part[it] = acceleration_part[it] - (S_C * delta + D_V * speed_part[it]);
+          }
+        }
+    }
+    particle.Set_acceleration(acceleration_part);
+    }
+
+
+
+
+

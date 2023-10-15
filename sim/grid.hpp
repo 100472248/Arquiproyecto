@@ -33,6 +33,7 @@ class Grid {
     void simulation(int iteraciones, double ppm);
     std::vector<int> find_adjacent_blocks (int px, int py, int pz);
     void uncheck();
+    std::array<double, 3> get_grid_size();
 
 };
 

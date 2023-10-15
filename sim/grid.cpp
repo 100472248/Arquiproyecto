@@ -162,7 +162,13 @@ void Grid::simulation(int iteraciones, double ppm) {
     }
 }
 
-
+std::array<double, 3> Grid::get_grid_size(){
+    std::array<double, 3> grid_size;
+    grid_size[0] = m_nx;
+    grid_size[1] = m_ny;
+    grid_size[2] = m_nz;
+    return grid_size;
+}
 
 std::array<double, 3> Grid::get_block_size() {
     return m_block_size;

@@ -31,6 +31,7 @@ class Particle {
     double get_density();
     double update_density(double aumento);
     void update_acceleration(std::array<double, 3> aumento);
+    std::array<double, 3> get_acceleration();
 };
 
 #endif //ARQUIPROYECTO_PARTICLE_HPP

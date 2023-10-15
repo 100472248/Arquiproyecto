@@ -37,6 +37,10 @@ std::vector<double> Particle::get_position() {
     return m_position;
 }
 
+std::array<double, 3> Particle::get_acceleration(){
+    return m_acceleration;
+}
+
 double Particle::get_mass() {
     return m_mass;
 }
@@ -58,3 +62,5 @@ double Particle::get_density() {
 void Particle::update_acceleration(std::array<double, 3> aumento) {
     m_acceleration = {m_acceleration[0] + aumento[0], m_acceleration[1] + aumento[1], m_acceleration[2] + aumento[2]};
 }
+
+
