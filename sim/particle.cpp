@@ -63,4 +63,8 @@ void Particle::update_acceleration(std::array<double, 3> aumento) {
     m_acceleration = {m_acceleration[0] + aumento[0], m_acceleration[1] + aumento[1], m_acceleration[2] + aumento[2]};
 }
 
+int Particle::get_id() {
+    return m_id;
+}
+
 

@@ -95,5 +95,9 @@ void Block::update_particle_acceleration(std::array<double, 3> aumento, int pos)
 
 }
 
+double Block::get_particle_density(int pos) {
+    return particles[pos].get_density();
+}
+
 
 

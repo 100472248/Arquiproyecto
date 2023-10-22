@@ -30,6 +30,7 @@ class Block {
     std::vector<double> get_particle_position(int pos);
     double update_particle_density(double aumento, int pos);
     void set_particle_density(double density, int pos);
+    double get_particle_density(int pos);
     void update_particle_acceleration(std::array<double, 3> aumento, int pos);
     Particle pop_particle(int index);
     void set_checked(bool valor);

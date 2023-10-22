@@ -93,15 +93,19 @@ void Grid::initialize_acc_dens() {
 
 void Grid::calc_density(double ppm) {
     for (int i = 0; i < static_cast<int>(bloques.size()); i++) {
+        // std::cout << "iteracion: " << i << std::endl;
+        // std::cout << "CHECK: " << bloques[i].get_checked() << std::endl;
         std::vector<int> contiguos = find_adjacent_blocks(bloques[i].get_i(), bloques[i].get_j(),
                                                           bloques[i].get_k());
         for (int posicion_contiguo: contiguos) {
             if (bloques[posicion_contiguo].get_checked()) {
-                break;
+                continue;
             }
+            // std::cout << "2 " << std::endl;
             int longitud_particulas_bloque = bloques[i].get_particles_length();
             int longitud_particulas_contiguo = bloques[posicion_contiguo].get_particles_length();
             for (int b = 0; b < longitud_particulas_bloque; b++) {
+                // std::cout << "3 " << std::endl;
                 std::vector<double> posicion_particula_bloque = bloques[i].get_particle_position(b);
                 for (int c = 0; c < longitud_particulas_contiguo; c++) {
                     if (posicion_contiguo == i && b == c) {continue;}
@@ -111,7 +115,9 @@ void Grid::calc_density(double ppm) {
                     double densidad_contiguo = bloques[posicion_contiguo].update_particle_density(aumento, c);
                     double transformacion_bloque = transform_density(ppm, densidad_bloque);
                     double transformacion_contiguo = transform_density(ppm, densidad_contiguo);
+                    // std::cout << "transformacion_bloque: " << transformacion_bloque << std::endl;
                     bloques[i].set_particle_density(transformacion_bloque, b);
+                    //std::cout << "densidad: " << bloques[i].get_particle_density(b) << std::endl;
                     bloques[posicion_contiguo].set_particle_density(transformacion_contiguo, c);
                 }
             }
@@ -119,6 +125,7 @@ void Grid::calc_density(double ppm) {
         bloques[i].set_checked(true);
     }
     uncheck();
+
 }
 
 void Grid::calc_acceleration(double ppm) {
@@ -127,7 +134,7 @@ void Grid::calc_acceleration(double ppm) {
                                                           bloques[i].get_k());
         for (int posicion_contiguo: contiguos) {
             if (bloques[posicion_contiguo].get_checked()) {
-                break;
+                continue;
             }
             int longitud_particulas_bloque = bloques[i].get_particles_length();
             int longitud_particulas_contiguo = bloques[posicion_contiguo].get_particles_length();
@@ -153,11 +160,13 @@ void Grid::calc_acceleration(double ppm) {
 
 void Grid::simulation(int iteraciones, double ppm) {
     for (int i = 0; i < iteraciones; i++) {
+        uncheck();
         reposition_particles(); // 4.3.1
         if (i == 0) {
             initialize_acc_dens(); // 4.3.1.1
         }
         calc_density(ppm); // 4.3.1.2 - 4.3.1.3
+        //print_particles();
         calc_acceleration(ppm); // 4.3.1.4
     }
 }
@@ -180,9 +189,42 @@ void Grid::set_block_size(std::array<double, 3> block_size) {
 }
 
 void Grid::uncheck() {
-    for (int i  = static_cast<int>(bloques.size()); i > 0; i--) {
+    for (int i  = 0; i < static_cast<int>(bloques.size()); i++) {
         bloques[i].set_checked(false);
     }
+}
+
+std::vector<Particle> Grid::reordenar_particulas() {
+    std::vector<Particle> particulas_reordenadas;
+    for (int i = 0; i < static_cast<int>(bloques.size()); i++) {
+        for (int j = 0; j < bloques[i].get_particles_length(); j++) {
+            Particle particula  =bloques[i].get_particle(j);
+            particulas_reordenadas.push_back(particula);
+        }
+    }
+    for (int k = 0; k < static_cast<int>(particulas_reordenadas.size()); k++) {
+        for (int l = 0; l < (static_cast<int>(particulas_reordenadas.size()) - k -1); l++) {
+            Particle particula = particulas_reordenadas[l];
+            Particle siguiente = particulas_reordenadas[l+1];
+            if (particula.get_id() > siguiente.get_id()) {
+                Particle temp = particulas_reordenadas[l];
+                particulas_reordenadas[l] = particulas_reordenadas[l+1];
+                particulas_reordenadas[l+1] = temp;
+            }
+        }
+    }
+    return particulas_reordenadas;
+}
+
+void Grid::print_particles() {
+    std::vector<Particle> particulas = reordenar_particulas();
+    for (Particle particula: particulas) {
+        std::array<double, 3>  acceleration = particula.get_acceleration();
+        std::cout << "Particle ID: " << particula.get_id() << std::endl;
+        std::cout << "Particle acceleration: " << acceleration[0] << " " << acceleration[1] << " " << acceleration[2] << std::endl;
+        std::cout << "Particle density: " << particula.get_density() << std::endl;
+    }
+
 }
 
 

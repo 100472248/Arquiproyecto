@@ -34,6 +34,8 @@ class Grid {
     std::vector<int> find_adjacent_blocks (int px, int py, int pz);
     void uncheck();
     std::array<double, 3> get_grid_size();
+    std::vector<Particle> reordenar_particulas();
+    void print_particles();
 
 };
 
