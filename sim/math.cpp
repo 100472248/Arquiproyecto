@@ -52,7 +52,7 @@ double increase_density(double ppm, std::vector <double> pi, std::vector <double
 
     double aumento = 0;
     if (h_2 > v_abs) {
-        aumento = pow(fabs(h_2 - v_abs), 3);
+        aumento = pow((h_2 - v_abs), 3);
     }
     return aumento;
 }

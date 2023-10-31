@@ -28,11 +28,11 @@ int Block::get_i(){
 }
 
 int Block::get_j(){
-    return m_i;
+    return m_j;
 }
 
 int Block::get_k(){
-    return m_i;
+    return m_k;
 }
 
 int Block::get_particles_length() {
