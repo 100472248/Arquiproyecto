@@ -48,7 +48,8 @@ double increase_density(double ppm, std::vector <double> pi, std::vector <double
     double resta_x = pi[0] - pj[0];
     double resta_y = pi[1] - pj[1];
     double resta_z = pi[2] - pj[2];
-    double v_abs = sqrt(pow(resta_x, 2) + pow(resta_y, 2) + pow(resta_z, 2));
+    double v_abs = pow(resta_x, 2) + pow(resta_y, 2) + pow(resta_z, 2);
+
     double aumento = 0;
     if (h_2 > v_abs) {
         aumento = pow(fabs(h_2 - v_abs), 3);
@@ -76,7 +77,7 @@ std::array<double, 3> increase_accerelation(double ppm, Particle pi, Particle pj
     double resta_x = posi[0] - posj[0];
     double resta_y = posi[1] - posj[1];
     double resta_z = posi[2] - posj[2];
-    double v_abs = sqrt(pow(resta_x, 2) + pow(resta_y, 2) + pow(resta_z, 2));
+    double v_abs = pow(resta_x, 2) + pow(resta_y, 2) + pow(resta_z, 2);
     std::array<double, 3>  aumento = {0,0,0};
     if (h_2 > v_abs) {
         double d_i = pi.get_density();

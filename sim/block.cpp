@@ -6,10 +6,10 @@
 #include "files.hpp"
 #include "math.hpp"
 
-Block::Block(int i, int j, int k) {
-  m_i = i;
-  m_j = j;
-  m_k = k;
+Block::Block(int i, int j, int k) : m_i(i), m_j(j), m_k(k) {
+
+
+
 }
 
 void Block::Add_particle(Particle &particle) {
@@ -43,10 +43,7 @@ bool Block::needs_reset(int index, std::array<double, 3> block_size) {
     std::array<int, 3> bloque = particles[index].get_bloque();
     std::vector<double> posicion = particles[index].get_position();
     std:: array<int, 3> pos_particle = posicion_particula(posicion[0], posicion[1], posicion[2], block_size);
-    if (bloque[0] != pos_particle[0] || bloque[1] != pos_particle[1] || bloque[2] != pos_particle[2]) {
-        return true;
-    }
-    return false;
+    return bloque[0] != pos_particle[0] || bloque[1] != pos_particle[1] || bloque[2] != pos_particle[2];
 
 }
 
