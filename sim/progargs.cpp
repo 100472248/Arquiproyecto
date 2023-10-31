@@ -62,7 +62,7 @@ int analizeArgs(int numArgumentos, std::vector<std::string> argumentos){
     return -3;
   }
   if (!open_file(argumentos[2])){
-    std::cerr<<"Error: Cannot open "<<argumentos[1]<<" for writing"<<std::endl;
+    std::cerr<<"Error: Cannot open "<<argumentos[2]<<" for writing"<<std::endl;
     return -4;
   }
   return 0; ///Todo ha ido bien

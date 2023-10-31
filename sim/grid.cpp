@@ -80,7 +80,7 @@ void Grid::reposition_particles() {
                                                                       position_particle[2], get_block_size());
                 int identificador = find_block(pos_particle[0], pos_particle[1], pos_particle[2]);
                 add_block_particle(identificador, particula);
-            };
+            }
         }
     }
 }
@@ -159,12 +159,14 @@ void Grid::calc_acceleration(double ppm) {
 }
 
 void Grid::simulation(int iteraciones, double ppm) {
+    std:: cout << "Hola" << '\n';
     for (int i = 0; i < iteraciones; i++) {
         uncheck();
         reposition_particles(); // 4.3.1
         if (i == 0) {
             initialize_acc_dens(); // 4.3.1.1
         }
+        std:: cout << "Hola" << i << '\n';
         calc_density(ppm); // 4.3.1.2 - 4.3.1.3
         //print_particles();
         calc_acceleration(ppm); // 4.3.1.4
@@ -203,13 +205,13 @@ std::vector<Particle> Grid::reordenar_particulas() {
         }
     }
     for (int k = 0; k < static_cast<int>(particulas_reordenadas.size()); k++) {
-        for (int l = 0; l < (static_cast<int>(particulas_reordenadas.size()) - k -1); l++) {
-            Particle particula = particulas_reordenadas[l];
-            Particle siguiente = particulas_reordenadas[l+1];
+        for (int var_l = 0; var_l < (static_cast<int>(particulas_reordenadas.size()) - k - 1); var_l++) {
+            Particle particula = particulas_reordenadas[var_l];
+            Particle siguiente = particulas_reordenadas[var_l + 1];
             if (particula.get_id() > siguiente.get_id()) {
-                Particle temp = particulas_reordenadas[l];
-                particulas_reordenadas[l] = particulas_reordenadas[l+1];
-                particulas_reordenadas[l+1] = temp;
+                Particle temp = particulas_reordenadas[var_l];
+                particulas_reordenadas[var_l] = particulas_reordenadas[var_l + 1];
+                particulas_reordenadas[var_l + 1] = temp;
             }
         }
     }
@@ -220,9 +222,9 @@ void Grid::print_particles() {
     std::vector<Particle> particulas = reordenar_particulas();
     for (Particle particula: particulas) {
         std::array<double, 3>  acceleration = particula.get_acceleration();
-        std::cout << "Particle ID: " << particula.get_id() << std::endl;
-        std::cout << "Particle acceleration: " << acceleration[0] << " " << acceleration[1] << " " << acceleration[2] << std::endl;
-        std::cout << "Particle density: " << particula.get_density() << std::endl;
+        std::cout << "Particle ID: " << particula.get_id() << '\n';
+        std::cout << "Particle acceleration: " << acceleration[0] << " " << acceleration[1] << " " << acceleration[2] << '\n';
+        std::cout << "Particle density: " << particula.get_density() << '\n';
     }
 
 }
