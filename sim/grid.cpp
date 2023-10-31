@@ -20,14 +20,14 @@ void Grid::Generate_blocks(int nx, int ny, int nz) {
   for (int i = 0; i < nx; i++) {
     for (int j = 0; j < ny; j++ ) {
       for (int k = 0; k < nz; k++) {
-        Block bloque(i,j,k);
+        Block const bloque(i,j,k);
         bloques.push_back(bloque);
       }
     }
   }
 }
 
-int Grid::find_block(int px, int py, int pz) {
+int Grid::find_block(int px, int py, int pz) const {
   // Encuentra si dadas unas constantes existe un bloque
   if (px < 0) { px = 0; }
   else if (px >= m_nx) { px = m_nx-1; }
@@ -38,7 +38,7 @@ int Grid::find_block(int px, int py, int pz) {
   return px * (m_ny*m_nz) + py * (m_nz) + pz;
 }
 
-int Grid::find_block_2(int px, int py, int pz) {
+int Grid::find_block_2(int px, int py, int pz) const {
     if (px < 0 || px >= m_nx) {
         return -1; }
     if (py < 0 || py >= m_ny) {
@@ -50,17 +50,17 @@ int Grid::find_block_2(int px, int py, int pz) {
 
 void Grid::add_block_particle(int i, Particle &particle){
     bloques[i].Add_particle(particle);
-    std::array<int, 3> bloque = {bloques[i].get_i(), bloques[i].get_j(), bloques[i].get_k()};
+    std::array<int, 3> const bloque = {bloques[i].get_i(), bloques[i].get_j(), bloques[i].get_k()};
     particle.Set_bloque(bloque);
 }
 
-std::vector<int> Grid::find_adjacent_blocks(int px, int py, int pz) {
+std::vector<int> Grid::find_adjacent_blocks(int px, int py, int pz) const {
     std::vector<int> adyacentes;
     for (int i = -1; i <= 1; i++) {
         for (int j = -1; j <= 1; j++) {
             for (int k = -1; k <= 1; k++) {
                 // std::cout << "Coordenadas a buscar" << px+i << " " << py+j << " " << pz+k << std::endl;
-                int posicion = find_block_2(px + i, py + j, pz + k);
+                int const posicion = find_block_2(px + i, py + j, pz + k);
                 // std::cout << "Posicion encontrada: " << posicion << std::endl;
                 if (posicion != -1) {
                     adyacentes.push_back(posicion);
@@ -73,14 +73,14 @@ std::vector<int> Grid::find_adjacent_blocks(int px, int py, int pz) {
 
 void Grid::reposition_particles() {
     for (int i = 0; i < static_cast<int>(bloques.size()); i++) {
-        int particles = bloques[i].get_particles_length();
+        int const particles = bloques[i].get_particles_length();
         for (int j = 0; j <particles; j++) {
             if (bloques[i].needs_reset(j, get_block_size())) {
                 Particle particula = bloques[i].pop_particle(j);
                 std::vector<double> position_particle = particula.get_position();
                 std::array<int, 3> pos_particle = posicion_particula(position_particle[0], position_particle[1],
                                                                       position_particle[2], get_block_size());
-                int identificador = find_block(pos_particle[0], pos_particle[1], pos_particle[2]);
+                int const identificador = find_block(pos_particle[0], pos_particle[1], pos_particle[2]);
                 add_block_particle(identificador, particula);
             }
         }
@@ -96,32 +96,32 @@ void Grid::initialize_acc_dens() {
 void Grid::calc_density(double ppm) {
     for (int i = 0; i < static_cast<int>(bloques.size()); i++) {
         // std::cout << "Soy el bloque: " << i << " " << "mis coordenadas son: " << bloques[i].get_i() << " " << bloques[i].get_j() << " " << bloques[i].get_k() << std::endl;
-        std::vector<int> contiguos = find_adjacent_blocks(bloques[i].get_i(), bloques[i].get_j(),
+        std::vector<int> const contiguos = find_adjacent_blocks(bloques[i].get_i(), bloques[i].get_j(),
                                                           bloques[i].get_k());
-        int longitud_particulas_bloque = bloques[i].get_particles_length();
+        int const longitud_particulas_bloque = bloques[i].get_particles_length();
         // std::cout << "Soy el bloque: " << i << " " << "mi check es: " << bloques[i].get_checked() << std::endl;
         //std::cout << "Tengo un total de: " << longitud_particulas_bloque << " particulas" << std::endl;
         //std::cout << "Las posiciones de mis bloques contiguos son: " << std::endl;
         //for (int posicion_contiguo2: contiguos) {
             //std::cout << "posicion_contiguo: " << posicion_contiguo2 << std::endl;
         //}
-        for (int posicion_contiguo: contiguos) {
+        for (int const posicion_contiguo: contiguos) {
             //std::cout << "Soy el contiguo que tiene posicion: " << posicion_contiguo << " " << "mi check es: " << bloques[posicion_contiguo].get_checked() << std::endl;
             if (bloques[posicion_contiguo].get_checked()) {
                 continue;
             }
-            int longitud_particulas_contiguo = bloques[posicion_contiguo].get_particles_length();
+            int const longitud_particulas_contiguo = bloques[posicion_contiguo].get_particles_length();
             //std::cout << "Tengo un total de: " << longitud_particulas_contiguo << " particulas" << std::endl;
             for (int b = 0; b < longitud_particulas_bloque; b++) {
-                std::vector<double> posicion_particula_bloque = bloques[i].get_particle_position(b);
+                std::vector<double> const posicion_particula_bloque = bloques[i].get_particle_position(b);
                 //std::cout << "Soy la particula: " << b << " del bloque base" << std::endl;
                 for (int c = 0; c < longitud_particulas_contiguo; c++) {
                     //std::cout << "Soy la particula: " << c << " del bloque contiguo" << std::endl;
                     if (posicion_contiguo == i && c <= b ) {
                         //std::cout << "AAAAAAAAAAAAAAAAAAAAAAAAAAAA" << std::endl;
                         continue;}
-                    std::vector<double> posicion_particula_contiguo = bloques[posicion_contiguo].get_particle_position(c);
-                    double aumento = increase_density(ppm, posicion_particula_bloque, posicion_particula_contiguo);
+                    std::vector<double> const posicion_particula_contiguo = bloques[posicion_contiguo].get_particle_position(c);
+                    double const aumento = increase_density(ppm, posicion_particula_bloque, posicion_particula_contiguo);
                     bloques[i].update_particle_density(aumento, b);
                     bloques[posicion_contiguo].update_particle_density(aumento, c);
                 }
@@ -134,11 +134,11 @@ void Grid::calc_density(double ppm) {
 
 void Grid::calc_density_2(double ppm) {
     for (int i = 0; i < static_cast<int>(bloques.size()); i++) {
-        int longitud_particulas_bloque = bloques[i].get_particles_length();
+        int const longitud_particulas_bloque = bloques[i].get_particles_length();
         for (int b = 0; b < longitud_particulas_bloque; b++) {
-            double density = bloques[i].get_particle_density(b);
+            double const density = bloques[i].get_particle_density(b);
             //std::cout << "densidad: " << density << std::endl;
-            double transformacion_bloque = transform_density(ppm, density);
+            double const transformacion_bloque = transform_density(ppm, density);
             //std::cout << "transformacion: " << transformacion_bloque << std::endl;
             bloques[i].set_particle_density(transformacion_bloque, b);
         }
@@ -146,22 +146,22 @@ void Grid::calc_density_2(double ppm) {
 }
 void Grid::calc_acceleration(double ppm) {
     for (int i = 0; i < static_cast<int>(bloques.size()); i++) {
-        std::vector<int> contiguos = find_adjacent_blocks(bloques[i].get_i(), bloques[i].get_j(),
+        std::vector<int> const contiguos = find_adjacent_blocks(bloques[i].get_i(), bloques[i].get_j(),
                                                           bloques[i].get_k());
-        for (int posicion_contiguo: contiguos) {
+        for (int const posicion_contiguo: contiguos) {
             if (bloques[posicion_contiguo].get_checked()) {
                 continue;
             }
-            int longitud_particulas_bloque = bloques[i].get_particles_length();
-            int longitud_particulas_contiguo = bloques[posicion_contiguo].get_particles_length();
+            int const longitud_particulas_bloque = bloques[i].get_particles_length();
+            int const longitud_particulas_contiguo = bloques[posicion_contiguo].get_particles_length();
             for (int b = 0; b < longitud_particulas_bloque; b++) {
-                std::vector<double> posicion_particula_bloque = bloques[i].get_particle_position(b);
+                std::vector<double> const posicion_particula_bloque = bloques[i].get_particle_position(b);
                 for (int c = 0; c < longitud_particulas_contiguo; c++) {
                     if (posicion_contiguo == i && c <= b) {continue;}
-                    std::vector<double> posicion_particula_contiguo = bloques[posicion_contiguo].get_particle_position(c);
+                    std::vector<double> const posicion_particula_contiguo = bloques[posicion_contiguo].get_particle_position(c);
                     // estas particulas son copias, no se estan actualizando
-                    Particle particula_bloque = bloques[i].get_particle(b);
-                    Particle particula_contiguo = bloques[posicion_contiguo].get_particle(c);
+                    Particle const particula_bloque = bloques[i].get_particle(b);
+                    Particle const particula_contiguo = bloques[posicion_contiguo].get_particle(c);
                     std::array<double, 3> aumento = increase_accerelation(ppm, particula_bloque, particula_contiguo);
                     bloques[i].update_particle_acceleration(aumento, b);
                     aumento = {-aumento[0], -aumento[1], -aumento[2]};
@@ -188,7 +188,7 @@ void Grid::simulation(int iteraciones, double ppm) {
     }
 }
 
-std::array<double, 3> Grid::get_grid_size(){
+std::array<double, 3> Grid::get_grid_size() const{
     std::array<double, 3> grid_size;
     grid_size[0] = m_nx;
     grid_size[1] = m_ny;
@@ -215,16 +215,16 @@ std::vector<Particle> Grid::reordenar_particulas() {
     std::vector<Particle> particulas_reordenadas;
     for (int i = 0; i < static_cast<int>(bloques.size()); i++) {
         for (int j = 0; j < bloques[i].get_particles_length(); j++) {
-            Particle particula  =bloques[i].get_particle(j);
+            Particle const particula  =bloques[i].get_particle(j);
             particulas_reordenadas.push_back(particula);
         }
     }
     for (int k = 0; k < static_cast<int>(particulas_reordenadas.size()); k++) {
         for (int var_l = 0; var_l < (static_cast<int>(particulas_reordenadas.size()) - k - 1); var_l++) {
-            Particle particula = particulas_reordenadas[var_l];
-            Particle siguiente = particulas_reordenadas[var_l + 1];
+            Particle const particula = particulas_reordenadas[var_l];
+            Particle const siguiente = particulas_reordenadas[var_l + 1];
             if (particula.get_id() > siguiente.get_id()) {
-                Particle temp = particulas_reordenadas[var_l];
+                Particle const temp = particulas_reordenadas[var_l];
                 particulas_reordenadas[var_l] = particulas_reordenadas[var_l + 1];
                 particulas_reordenadas[var_l + 1] = temp;
             }
@@ -234,7 +234,7 @@ std::vector<Particle> Grid::reordenar_particulas() {
 }
 
 void Grid::print_particles() {
-    std::vector<Particle> particulas = reordenar_particulas();
+    std::vector<Particle> const particulas = reordenar_particulas();
     int contador = 0;
     for (Particle particula: particulas) {
         if (contador > MIL) {break;}

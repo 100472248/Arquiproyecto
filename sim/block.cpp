@@ -3,7 +3,6 @@
 //
 #include "block.hpp"
 #include "particle.hpp"
-#include "files.hpp"
 #include "math.hpp"
 
 Block::Block(int i, int j, int k) : m_i(i), m_j(j), m_k(k) {
@@ -16,22 +15,19 @@ void Block::Add_particle(Particle &particle) {
   particles.push_back(particle);
 }
 
-bool Block:: Exists_block(int px, int py, int pz){
-    if (m_i == px && m_j == py && m_k == pz){
-        return true;
-    }
-    return false;
+bool Block:: Exists_block(int px, int py, int pz) const{
+    return m_i == px && m_j == py && m_k == pz;
 }
 
-int Block::get_i(){
+int Block::get_i() const{
     return m_i;
 }
 
-int Block::get_j(){
+int Block::get_j() const{
     return m_j;
 }
 
-int Block::get_k(){
+int Block::get_k() const{
     return m_k;
 }
 
@@ -78,7 +74,7 @@ void Block::set_checked(bool valor) {
 
 }
 
-bool Block::get_checked() {
+bool Block::get_checked() const {
     return checked;
 }
 

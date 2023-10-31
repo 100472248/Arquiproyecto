@@ -1,6 +1,10 @@
 #include "files.hpp"
 
+
+
+
 #include <cmath>
+
 #include <fstream>
 #include <iostream>
 #include <string>
@@ -30,14 +34,8 @@ struct Datos_cabecera read_header_file (const std::string& fileName){
   return resultado;
 }
 
-std::vector<double> read_particle(std::ifstream &archivo, float &p_x, float &p_y, float &p_z);
-
-std::vector<double> readGradient(std::ifstream &archivo);
-
-std::vector<double> readSpeed(std::ifstream &archivo);
-
-int Read_particles(std:: string filename, Grid &malla, double ppm) {
-    double masa = calc_masa(ppm);
+int Read_particles(const std:: string& filename, Grid &malla, double ppm) {
+    double const masa = calc_masa(ppm);
     //Lectura
     std::ifstream archivo(filename, std::ios::binary);
     int num_id = 0;
@@ -45,10 +43,10 @@ int Read_particles(std:: string filename, Grid &malla, double ppm) {
     while (!archivo.eof()) {
         std::vector<double> pos = read_particle(archivo);
         // std::cout << "posicion_bloque: " << pos[0] << " " << pos[1] << " " << pos[2] << std::endl;
-        std::vector<double> gradient = readGradient(archivo);
-        std::vector<double> speed = readSpeed(archivo);
+        std::vector<double> const gradient = readGradient(archivo);
+        std::vector<double> const speed = readSpeed(archivo);
         std:: array<int, 3> pos_particle = posicion_particula(pos[0], pos[1], pos[2], malla.get_block_size());
-        int identificador = malla.find_block(pos_particle[0], pos_particle[1], pos_particle[2]);
+        int const identificador = malla.find_block(pos_particle[0], pos_particle[1], pos_particle[2]);
         Particle particula(num_id, pos, gradient, speed);
         particula.Set_mass(masa);
         malla.add_block_particle(identificador, particula);
@@ -56,9 +54,9 @@ int Read_particles(std:: string filename, Grid &malla, double ppm) {
     return num_id - 1;}
 
 std::vector<double> readSpeed(std::ifstream &archivo) {
-    float v_x;
-    float v_y;
-    float v_z;
+    float v_x = NAN;
+    float v_y = NAN;
+    float v_z = NAN;
     archivo.read(reinterpret_cast<char *>(&v_x), sizeof(float));
     archivo.read(reinterpret_cast<char *>(&v_y), sizeof(float));
     archivo.read(reinterpret_cast<char *>(&v_z), sizeof(float));
@@ -67,9 +65,9 @@ std::vector<double> readSpeed(std::ifstream &archivo) {
 }
 
 std::vector<double> readGradient(std::ifstream &archivo) {
-    float hvx;
-    float hvy;
-    float hvz;
+    float hvx = NAN;
+    float hvy = NAN;
+    float hvz = NAN;
     archivo.read(reinterpret_cast<char *>(&hvx), sizeof(float));
     archivo.read(reinterpret_cast<char *>(&hvy), sizeof(float));
     archivo.read(reinterpret_cast<char *>(&hvz), sizeof(float));
@@ -78,9 +76,9 @@ std::vector<double> readGradient(std::ifstream &archivo) {
 }
 
 std::vector<double> read_particle(std::ifstream &archivo) {
-    float p_x;
-    float p_y;
-    float p_z;
+    float p_x = NAN;
+    float p_y = NAN;
+    float p_z = NAN;
     archivo.read(reinterpret_cast<char *>(&p_x), sizeof(float));
     archivo.read(reinterpret_cast<char *>(&p_y), sizeof(float));
     archivo.read(reinterpret_cast<char *>(&p_z), sizeof(float));

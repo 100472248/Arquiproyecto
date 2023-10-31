@@ -45,7 +45,7 @@ std::array<double, 3> Particle::get_acceleration(){
     return m_acceleration;
 }
 
-double Particle::get_mass() {
+double Particle::get_mass() const {
     return m_mass;
 }
 
@@ -58,7 +58,7 @@ void Particle::update_density(double aumento) {
     m_density += aumento;
 }
 
-double Particle::get_density() {
+double Particle::get_density() const {
     return m_density;
 }
 
@@ -66,7 +66,7 @@ void Particle::update_acceleration(std::array<double, 3> aumento) {
     m_acceleration = {m_acceleration[0] + aumento[0], m_acceleration[1] + aumento[1], m_acceleration[2] + aumento[2]};
 }
 
-int Particle::get_id() {
+int Particle::get_id() const {
     return m_id;
 }
 

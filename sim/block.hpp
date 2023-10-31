@@ -19,10 +19,10 @@ class Block {
   public:
     Block(int i, int j, int k);
     void Add_particle(Particle &particle);
-    bool Exists_block(int px, int py, int pz);
-    int get_i();
-    int get_j();
-    int get_k();
+    bool Exists_block(int px, int py, int pz) const;
+    int get_i() const;
+    int get_j() const;
+    int get_k() const;
     int get_particles_length();
     Particle get_particle(int pos);
     bool needs_reset(int index, std::array<double, 3> m_block_size);
@@ -34,7 +34,7 @@ class Block {
     void update_particle_acceleration(std::array<double, 3> aumento, int pos);
     Particle pop_particle(int index);
     void set_checked(bool valor);
-    bool get_checked();
+    bool get_checked() const;
 };
 
 #endif //ARQUIPROYECTO_BLOCK_HPP

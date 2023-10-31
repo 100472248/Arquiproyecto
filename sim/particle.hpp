@@ -27,9 +27,9 @@ class Particle {
     std::array<int, 3> get_bloque();
     std::vector<double> get_position();
     std::vector<double>get_speed();
-    double get_mass();
-    double get_density();
-    int get_id();
+    double get_mass() const;
+    double get_density() const;
+    int get_id() const;
     void update_density(double aumento);
     void update_acceleration(std::array<double, 3> aumento);
     std::array<double, 3> get_acceleration();

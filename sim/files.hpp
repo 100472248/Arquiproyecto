@@ -10,7 +10,7 @@ struct Datos_cabecera {
 };
 struct Datos_cabecera read_header_file(const std::string& fileName);
 
-int Read_particles(std:: string filename, Grid &malla, double ppm);
+int Read_particles(const std:: string& filename, Grid &malla, double ppm);
 std::vector<double> read_particle(std::ifstream &archivo);
 std::vector<double> readGradient(std::ifstream &archivo);
 std::vector<double> readSpeed(std::ifstream &archivo);
