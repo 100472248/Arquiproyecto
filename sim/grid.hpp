@@ -29,6 +29,7 @@ class Grid {
     void initialize_acc_dens();
     void reposition_particles();
     void calc_density(double ppm);
+    void calc_density_2(double ppm);
     void calc_acceleration(double ppm);
     void simulation(int iteraciones, double ppm);
     std::vector<int> find_adjacent_blocks (int px, int py, int pz);

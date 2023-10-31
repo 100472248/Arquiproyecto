@@ -28,7 +28,7 @@ class Block {
     bool needs_reset(int index, std::array<double, 3> m_block_size);
     void initialize_acc_dens_block(std::array<double, 3> g);
     std::vector<double> get_particle_position(int pos);
-    double update_particle_density(double aumento, int pos);
+    void update_particle_density(double aumento, int pos);
     void set_particle_density(double density, int pos);
     double get_particle_density(int pos);
     void update_particle_acceleration(std::array<double, 3> aumento, int pos);

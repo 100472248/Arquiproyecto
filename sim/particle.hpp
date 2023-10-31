@@ -30,7 +30,7 @@ class Particle {
     double get_mass();
     double get_density();
     int get_id();
-    double update_density(double aumento);
+    void update_density(double aumento);
     void update_acceleration(std::array<double, 3> aumento);
     std::array<double, 3> get_acceleration();
 };

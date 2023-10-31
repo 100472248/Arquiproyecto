@@ -103,31 +103,43 @@ void Grid::calc_density(double ppm) {
             }
             // std::cout << "2 " << std::endl;
             int longitud_particulas_bloque = bloques[i].get_particles_length();
+            // std::cout << "longitud_particulas_bloque: " << longitud_particulas_bloque << std::endl;
             int longitud_particulas_contiguo = bloques[posicion_contiguo].get_particles_length();
+            // std::cout << "longitud_particulas_contiguo: " << longitud_particulas_contiguo << std::endl;
             for (int b = 0; b < longitud_particulas_bloque; b++) {
                 // std::cout << "3 " << std::endl;
                 std::vector<double> posicion_particula_bloque = bloques[i].get_particle_position(b);
+                // std::cout << "posicion_bloque: " << posicion_particula_bloque[0] << " " << posicion_particula_bloque[1] << " " << posicion_particula_bloque[2] << std::endl;
                 for (int c = 0; c < longitud_particulas_contiguo; c++) {
-                    if (posicion_contiguo == i && b == c) {continue;}
+                    if (posicion_contiguo == i && c <= b ) {continue;}
                     std::vector<double> posicion_particula_contiguo = bloques[posicion_contiguo].get_particle_position(c);
                     double aumento = increase_density(ppm, posicion_particula_bloque, posicion_particula_contiguo);
-                    double densidad_bloque = bloques[i].update_particle_density(aumento, b);
-                    double densidad_contiguo = bloques[posicion_contiguo].update_particle_density(aumento, c);
-                    double transformacion_bloque = transform_density(ppm, densidad_bloque);
-                    double transformacion_contiguo = transform_density(ppm, densidad_contiguo);
+                    bloques[i].update_particle_density(aumento, b);
+                    bloques[posicion_contiguo].update_particle_density(aumento, c);
+                    //double transformacion_bloque = transform_density(ppm, densidad_bloque);
+                    // double transformacion_contiguo = transform_density(ppm, densidad_contiguo);
                     // std::cout << "transformacion_bloque: " << transformacion_bloque << std::endl;
-                    bloques[i].set_particle_density(transformacion_bloque, b);
-                    //std::cout << "densidad: " << bloques[i].get_particle_density(b) << std::endl;
-                    bloques[posicion_contiguo].set_particle_density(transformacion_contiguo, c);
+                    //bloques[i].set_particle_density(transformacion_bloque, b);
+                    // std::cout << "densidad: " << bloques[i].get_particle_density(b) << std::endl;
+                    //bloques[posicion_contiguo].set_particle_density(transformacion_contiguo, c);
                 }
             }
         }
         bloques[i].set_checked(true);
     }
     uncheck();
-
 }
 
+void Grid::calc_density_2(double ppm) {
+    for (int i = 0; i < static_cast<int>(bloques.size()); i++) {
+        int longitud_particulas_bloque = bloques[i].get_particles_length();
+        for (int b = 0; b < longitud_particulas_bloque; b++) {
+            double density = bloques[i].get_particle_density(b);
+            double transformacion_bloque = transform_density(ppm, density);
+            bloques[i].set_particle_density(transformacion_bloque, b);
+        }
+    }
+}
 void Grid::calc_acceleration(double ppm) {
     for (int i = 0; i < static_cast<int>(bloques.size()); i++) {
         std::vector<int> contiguos = find_adjacent_blocks(bloques[i].get_i(), bloques[i].get_j(),
@@ -141,7 +153,7 @@ void Grid::calc_acceleration(double ppm) {
             for (int b = 0; b < longitud_particulas_bloque; b++) {
                 std::vector<double> posicion_particula_bloque = bloques[i].get_particle_position(b);
                 for (int c = 0; c < longitud_particulas_contiguo; c++) {
-                    if (posicion_contiguo == i && b == c) {continue;}
+                    if (posicion_contiguo == i && c <= b) {continue;}
                     std::vector<double> posicion_particula_contiguo = bloques[posicion_contiguo].get_particle_position(c);
                     // estas particulas son copias, no se estan actualizando
                     Particle particula_bloque = bloques[i].get_particle(b);
@@ -159,16 +171,17 @@ void Grid::calc_acceleration(double ppm) {
 }
 
 void Grid::simulation(int iteraciones, double ppm) {
-    std:: cout << "Hola" << '\n';
+    // std:: cout << "Hola" << '\n';
     for (int i = 0; i < iteraciones; i++) {
         uncheck();
         reposition_particles(); // 4.3.1
         if (i == 0) {
             initialize_acc_dens(); // 4.3.1.1
         }
-        std:: cout << "Hola" << i << '\n';
+        // std:: cout << "Hola" << i << '\n';
         calc_density(ppm); // 4.3.1.2 - 4.3.1.3
-        //print_particles();
+        calc_density_2(ppm);
+        print_particles();
         calc_acceleration(ppm); // 4.3.1.4
     }
 }
@@ -222,7 +235,9 @@ void Grid::print_particles() {
     std::vector<Particle> particulas = reordenar_particulas();
     for (Particle particula: particulas) {
         std::array<double, 3>  acceleration = particula.get_acceleration();
+        std::vector<double> position = particula.get_position();
         std::cout << "Particle ID: " << particula.get_id() << '\n';
+        std::cout << "Particle position: " << position[0] << " " << position[1] << " " << position[2] << '\n';
         std::cout << "Particle acceleration: " << acceleration[0] << " " << acceleration[1] << " " << acceleration[2] << '\n';
         std::cout << "Particle density: " << particula.get_density() << '\n';
     }

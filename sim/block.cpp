@@ -65,8 +65,8 @@ std::vector<double> Block::get_particle_position(int pos) {
     return particles[pos].get_position();
 }
 
-double Block::update_particle_density(double aumento, int pos) {
-    return particles[pos].update_density(aumento);
+void Block::update_particle_density(double aumento, int pos) {
+    particles[pos].update_density(aumento);
 }
 
 void Block::set_particle_density(double density, int pos) {

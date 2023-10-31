@@ -50,9 +50,8 @@ std::vector<double> Particle:: get_speed(){
     return speed;
 }
 
-double Particle::update_density(double aumento) {
+void Particle::update_density(double aumento) {
     m_density += aumento;
-    return get_density();
 }
 
 double Particle::get_density() {

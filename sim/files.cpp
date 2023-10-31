@@ -42,6 +42,7 @@ int Read_particles(std:: string filename, Grid &malla, double ppm) {
         archivo.read(reinterpret_cast<char *>(&py), sizeof(float));
         archivo.read(reinterpret_cast<char *>(&pz), sizeof(float));
         std:: vector<double> pos = {static_cast<double>(px), static_cast<double>(py), static_cast<double>(pz)};
+        // std::cout << "posicion_bloque: " << pos[0] << " " << pos[1] << " " << pos[2] << std::endl;
         archivo.read(reinterpret_cast<char *>(&hvx), sizeof(float));
         archivo.read(reinterpret_cast<char *>(&hvy), sizeof(float));
         archivo.read(reinterpret_cast<char *>(&hvz), sizeof(float));
