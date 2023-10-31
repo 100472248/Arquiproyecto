@@ -3,11 +3,15 @@
 #include <string>
 #include "grid.hpp"
 #include "particle.hpp"
+int const OCHO = 8;
 struct Datos_cabecera {
     int np;
     double ppm;
 };
-struct Datos_cabecera read_header_file(std::string fileName);
+struct Datos_cabecera read_header_file(const std::string& fileName);
 
 int Read_particles(std:: string filename, Grid &malla, double ppm);
+std::vector<double> read_particle(std::ifstream &archivo);
+std::vector<double> readGradient(std::ifstream &archivo);
+std::vector<double> readSpeed(std::ifstream &archivo);
 #endif

@@ -91,10 +91,10 @@ std::array<double, 3> increase_accerelation(double ppm, Particle pi, Particle pj
 
 
 std::array<double, 3> new_position_x_y_z(std::vector<double> position_part, std::vector<double> speed_gradient_part){
-    double x = position_part[0]+ speed_gradient_part[0] * DELTA_T;
-    double y = position_part[1]+ speed_gradient_part[1] * DELTA_T;
-    double z = position_part[2]+ speed_gradient_part[2] * DELTA_T;
-    std::array<double, 3> new_position_x_y_z = {x, y, z};
+    double new_x = position_part[0] + speed_gradient_part[0] * DELTA_T;
+    double new_y = position_part[1] + speed_gradient_part[1] * DELTA_T;
+    double new_z = position_part[2] + speed_gradient_part[2] * DELTA_T;
+    std::array<double, 3> new_position_x_y_z = {new_x, new_y, new_z};
     return new_position_x_y_z;
 }
 
@@ -104,7 +104,7 @@ void update_acceleration(std::array<double, 3> new_positions, Particle &particle
     std::vector<double> speed_part          = particle.get_speed();
     std::array<double, 3> acceleration_part = particle.get_acceleration();
     std::array<double, 3> grid_size         = grid.get_grid_size();
-    double delta                            = 0;
+    double delta;
 
     for (int it = 0; it < 3; it++) {
         delta = 0;
@@ -125,6 +125,40 @@ void update_acceleration(std::array<double, 3> new_positions, Particle &particle
     }
 
 
+void update_all (Particle &particula){
+    std::vector<double> position_part = particula.get_position();
+    std::vector<double> gradient_part = particula.get_gradient();
+    std::vector<double> speed_part = particula.get_speed();
+    std::array<double, 3> acceleration_part = particula.get_acceleration();
+    for (int i = 0; i < 3; i ++){
+        position_part[i] = position_part[i] +  gradient_part[i] * DELTA_T + acceleration_part[i] * pow(DELTA_T, 2);
+        speed_part[i] = gradient_part[i] + (acceleration_part[i] * DELTA_T)/2;
+        gradient_part[i] = gradient_part[i] + acceleration_part[i] * DELTA_T;
+    }
+    particula.set_position(position_part);
+    particula.set_gradient(gradient_part);
+    particula.set_speed(speed_part);
+}
 
-
-
+void colision_walls (Particle &particula, Grid &grid){
+    std::vector<double> position_part = particula.get_position();
+    std::vector<double> gradient_part = particula.get_gradient();
+    std::vector<double> speed_part = particula.get_speed();
+    std::array<int, 3> block_part  = particula.get_bloque();
+    std::array<double, 3> grid_size  = grid.get_grid_size();
+    std:: vector<double> var_d = {0, 0, 0};
+    for (int it = 0; it < 3; it++) {
+        if (block_part[it] == 0) {
+            var_d[it] = position_part[it] - BMIN[it];}
+        else if (block_part[it] == grid_size[it] - 1) {
+            var_d[it] = BMAX[it] - position_part[it];}
+        if (var_d[it] < 0) {
+            if (block_part[it] == 0) {
+                position_part[it] = BMIN[it] - var_d[it];}
+            else if (block_part[it] == grid_size[it] - 1) {
+                position_part[it] = BMAX[it] + var_d[it];}
+            speed_part[it] = -speed_part[it];
+            gradient_part[it] = -gradient_part[it];}}
+    particula.set_position(position_part);
+    particula.set_gradient(gradient_part);
+    particula.set_speed(speed_part);}

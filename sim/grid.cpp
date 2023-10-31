@@ -9,10 +9,10 @@
 #include <iostream>
 #include <array>
 
-Grid::Grid(int nx, int ny, int nz) {
-  m_nx = nx;
-  m_ny = ny;
-  m_nz = nz;
+Grid::Grid(int nx, int ny, int nz) : m_nx(nx), m_ny(ny), m_nz(nz) {
+
+
+
   Generate_blocks(nx, ny, nz);
 }
 
@@ -237,7 +237,7 @@ void Grid::print_particles() {
     std::vector<Particle> particulas = reordenar_particulas();
     int contador = 0;
     for (Particle particula: particulas) {
-        if (contador > 1000) {break;}
+        if (contador > MIL) {break;}
         std::array<double, 3>  acceleration = particula.get_acceleration();
         std::vector<double> position = particula.get_position();
         std::cout << "Particle ID: " << particula.get_id() << '\n';

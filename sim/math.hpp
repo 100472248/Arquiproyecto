@@ -33,5 +33,6 @@ std::array<double, 3> new_position_x_y_z(std::vector<double> position_part, std:
 void update_acceleration(std::array<double, 3> new_positions, Particle &particle, Grid &grid);
 double increase_density(double ppm, std::vector <double> pi, std::vector <double> pj) ;
 double transform_density(double ppm, double Ri);
+void update_all (Particle particula);
 #endif //ARQUIPROYECTO_MATH_HPP
 

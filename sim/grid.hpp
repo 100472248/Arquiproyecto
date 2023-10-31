@@ -7,6 +7,7 @@
 #include <iostream>
 #include <array>
 
+int const MIL = 1000;
 std::array<double,3> const BMAX = {0.065, 0.1, 0.065};
 std::array<double,3> const BMIN = {-0.065, -0.08, -0.065};
 std::array<double, 3>const G = {0, -9.8, 0};

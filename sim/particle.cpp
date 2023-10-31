@@ -3,14 +3,18 @@
 //
 
 #include "particle.hpp"
+#include <utility>
 #include <vector>
 #include <array>
 
-Particle::Particle(int id, std::vector<double> position, std::vector<double> speed_gradient, std::vector<double> speed) {
-  m_id = id;
-  m_position = position;
-  m_speed_gradient = speed_gradient;
-  m_speed = speed;
+Particle::Particle(int id, std::vector<double> position,
+                   std::vector<double> speed_gradient, std::vector<double> speed) :
+                   m_id(id), m_position(std::move(position)), m_speed_gradient(std::move(speed_gradient)),
+                   m_speed(std::move(speed)) {
+
+
+
+
 
 }
 void Particle::Set_bloque(std::array<int, 3> bloque) {
@@ -66,4 +70,20 @@ int Particle::get_id() {
     return m_id;
 }
 
+std::vector<double> Particle:: get_gradient(){
+    std::vector<double> gradient = {m_speed_gradient[0], m_speed_gradient[1], m_speed_gradient[2]};
+    return gradient;
+}
+
+void Particle:: set_gradient(std::vector<double> gradient_part){
+    m_speed_gradient = std::move(gradient_part);
+}
+
+void Particle:: set_speed(std::vector<double> speed_part){
+    m_speed = std::move(speed_part);
+}
+
+void Particle:: set_position(std::vector<double> position_part){
+    m_position = std::move(position_part);
+}
 
