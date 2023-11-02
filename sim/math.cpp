@@ -91,40 +91,27 @@ std::array<double, 3> increase_accerelation(double ppm, Particle pi, Particle pj
     return aumento;}
 
 
-std::array<double, 3> new_position_x_y_z(std::vector<double> position_part, std::vector<double> speed_gradient_part){
-    double const new_x = position_part[0] + speed_gradient_part[0] * DELTA_T;
-    double const new_y = position_part[1] + speed_gradient_part[1] * DELTA_T;
-    double const new_z = position_part[2] + speed_gradient_part[2] * DELTA_T;
-    std::array<double, 3> new_position_x_y_z = {new_x, new_y, new_z};
-    return new_position_x_y_z;
+double new_position(double position_part, double speed_gradient_part) {
+    double const new_position = position_part + speed_gradient_part * DELTA_T;
+    return new_position;
 }
 
-void update_acceleration(std::array<double, 3> new_positions, Particle &particle, Grid &grid) {
-    std::vector<double> const position_part       = particle.get_position();
-    std::array<int, 3> block_part           = particle.get_bloque();
-    std::vector<double> speed_part          = particle.get_speed();
-    std::array<double, 3> acceleration_part = particle.get_acceleration();
-    std::array<double, 3> grid_size         = grid.get_grid_size();
+double update_acceleration(double new_pos, double velocidad, int tipo, int coordenada) {
+    double aumento = 0;
     double delta = NAN;
-
-    for (int it = 0; it < 3; it++) {
-        delta = 0;
-        if (block_part[it] == 0) {
-          delta = D_P - (new_positions[it] - BMIN[it]);
-        } else if (block_part[it] == grid_size[it] - 1) {
-          delta = D_P - (BMAX[it] - new_positions[it]);
-        }
+    if (tipo == 0) {
+        delta = D_P - (new_pos - BMIN[coordenada]);
         if (delta > pow(TEN, -TEN)) {
-          if (block_part[it] == 0) {
-            acceleration_part[it] = acceleration_part[it] + (S_C * delta - D_V * speed_part[it]);
-          } else if (block_part[it] == grid_size[it] - 1) {
-            acceleration_part[it] = acceleration_part[it] - (S_C * delta + D_V * speed_part[it]);
-          }
+            aumento = S_C * delta - D_V * velocidad;
+        }
+    } else if (tipo == 1) {
+        delta = D_P - (BMAX[coordenada] - new_pos);
+        if (delta > pow(TEN, -TEN)) {
+            aumento = -(S_C * delta + D_V * velocidad);
         }
     }
-    particle.Set_acceleration(acceleration_part);
-    }
-
+    return aumento;
+}
 
 void update_all (Particle &particula){
     std::vector<double> position_part = particula.get_position();

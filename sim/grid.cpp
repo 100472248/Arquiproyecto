@@ -144,15 +144,17 @@ void Grid::calc_density_2(double ppm) {
         }
     }
 }
+
 void Grid::calc_acceleration(double ppm) {
     for (int i = 0; i < static_cast<int>(bloques.size()); i++) {
         std::vector<int> const contiguos = find_adjacent_blocks(bloques[i].get_i(), bloques[i].get_j(),
                                                           bloques[i].get_k());
+        int const longitud_particulas_bloque = bloques[i].get_particles_length();
+
         for (int const posicion_contiguo: contiguos) {
             if (bloques[posicion_contiguo].get_checked()) {
                 continue;
             }
-            int const longitud_particulas_bloque = bloques[i].get_particles_length();
             int const longitud_particulas_contiguo = bloques[posicion_contiguo].get_particles_length();
             for (int b = 0; b < longitud_particulas_bloque; b++) {
                 std::vector<double> const posicion_particula_bloque = bloques[i].get_particle_position(b);
@@ -174,6 +176,61 @@ void Grid::calc_acceleration(double ppm) {
     uncheck();
 }
 
+void Grid::particles_collisions() {
+    collisions_x();
+    collisions_y();
+    collisions_z();
+}
+
+void Grid::collisions_z() {
+    for (int i = 0; i <= 1; i++) {
+        std::vector<int> border_positions = get_border_z(i);
+        for (int posicion: border_positions) {
+            int longitud_particulas_bloque = bloques[posicion].get_particles_length();
+            for (int b = 0; b < longitud_particulas_bloque; b++) {
+                double new_p = new_position(bloques[posicion].get_particle_position(b)[2],
+                                     bloques[posicion].get_particle_gradient(b)[2]);
+                double aumento = update_acceleration(new_p, bloques[posicion].get_particle_speed(b)[2],
+                                              i, 2);
+                bloques[posicion].update_particle_acceleration({0, 0, aumento}, b);
+            }
+        }
+    }
+}
+
+void Grid::collisions_y() {
+    for (int i = 0; i <= 1; i++) {
+        std::vector<int> border_positions = get_border_y(i);
+        for (int posicion: border_positions) {
+            int longitud_particulas_bloque = bloques[posicion].get_particles_length();
+            for (int b = 0; b < longitud_particulas_bloque; b++) {
+                double new_p = new_position(bloques[posicion].get_particle_position(b)[1],
+                                     bloques[posicion].get_particle_gradient(b)[1]);
+                double aumento = update_acceleration(new_p, bloques[posicion].get_particle_speed(b)[1],
+                                              i, 1);
+                bloques[posicion].update_particle_acceleration({0, aumento, 0}, b);
+            }
+        }
+    }
+}
+
+void Grid::collisions_x() {
+    for (int i = 0; i <= 1; i++) {
+        std::vector<int> border_positions = get_border_x(i);
+        for (int posicion: border_positions) {
+            int longitud_particulas_bloque = bloques[posicion].get_particles_length();
+            for (int b = 0; b < longitud_particulas_bloque; b++) {
+                double new_p = new_position(bloques[posicion].get_particle_position(b)[0],
+                                     bloques[posicion].get_particle_gradient(b)[0]);
+                double aumento = update_acceleration(new_p, bloques[posicion].get_particle_speed(b)[0],
+                                              i, 0);
+                // std::cout << "aumento: " << aumento << std::endl;
+                bloques[posicion].update_particle_acceleration({aumento, 0, 0}, b);
+            }
+        }
+    }
+}
+
 void Grid::simulation(int iteraciones, double ppm) {
     // std:: cout << "Hola" << '\n';
     for (int i = 0; i < iteraciones; i++) {
@@ -183,7 +240,8 @@ void Grid::simulation(int iteraciones, double ppm) {
         // std:: cout << "Hola" << i << '\n';
         calc_density(ppm); // 4.3.1.2 - 4.3.1.3
         calc_density_2(ppm);
-        calc_acceleration(ppm); // 4.3.1.4);
+        calc_acceleration(ppm); // 4.3.1.4
+        particles_collisions();
     }
     print_particles();
 }
@@ -268,6 +326,48 @@ void Grid::print_particles() {
         contador++;
     }
 
+}
+
+std::vector<int> Grid::get_border_x(int tipo) {
+    if (tipo != 0 && tipo != 1) {
+        return {-1};
+    }
+    std::vector<int> posiciones;
+    for (int i = 0; i < m_ny; i++) {
+        for (int j = 0; j < m_nz; j++) {
+            if (tipo == 0) {posiciones.push_back(find_block_2(0, i, j));}
+            else {posiciones.push_back(find_block_2(m_nx-1, i, j ));}
+        }
+    }
+    return posiciones;
+}
+
+std::vector<int> Grid::get_border_y(int tipo) {
+    if (tipo != 0 && tipo != 1) {
+        return {-1};
+    }
+    std::vector<int> posiciones;
+    for (int i = 0; i < m_nx; i++) {
+        for (int j = 0; j < m_nz; j++) {
+            if (tipo == 0) {posiciones.push_back(find_block_2(i, 0, j));}
+            else {posiciones.push_back(find_block_2(i, m_ny-1, j ));}
+        }
+    }
+    return posiciones;
+}
+
+std::vector<int> Grid::get_border_z(int tipo) {
+    if (tipo != 0 && tipo != 1) {
+        return {-1};
+    }
+    std::vector<int> posiciones;
+    for (int i = 0; i < m_nx; i++) {
+        for (int j = 0; j < m_ny; j++) {
+            if (tipo == 0) {posiciones.push_back(find_block_2(i, j, 0));}
+            else {posiciones.push_back(find_block_2(i, j, m_nz-1 ));}
+        }
+    }
+    return posiciones;
 }
 
 

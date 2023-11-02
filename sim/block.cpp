@@ -89,5 +89,14 @@ double Block::get_particle_density(int pos) {
     return particles[pos].get_density();
 }
 
+std::vector<double> Block::get_particle_gradient(int pos) {
+    return particles[pos].get_gradient();
+}
 
+std::vector<double> Block::get_particle_speed(int pos) {
+    return particles[pos].get_speed();
+}
 
+std::array<double, 3> Block::get_particle_acc(int pos) {
+    return particles[pos].get_acceleration();
+}
