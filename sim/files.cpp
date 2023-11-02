@@ -48,6 +48,7 @@ int Read_particles(const std:: string& filename, Grid &malla, double ppm) {
         std:: array<int, 3> pos_particle = posicion_particula(pos[0], pos[1], pos[2], malla.get_block_size());
         int const identificador = malla.find_block(pos_particle[0], pos_particle[1], pos_particle[2]);
         Particle particula(num_id, pos, gradient, speed);
+        //std::cout << pos[0] << " " << pos[1] << " " << pos[2] << std::endl;
         particula.Set_mass(masa);
         malla.add_block_particle(identificador, particula);
         num_id ++;}

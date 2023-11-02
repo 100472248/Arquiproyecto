@@ -183,8 +183,8 @@ void Grid::simulation(int iteraciones, double ppm) {
         // std:: cout << "Hola" << i << '\n';
         calc_density(ppm); // 4.3.1.2 - 4.3.1.3
         calc_density_2(ppm);
-        print_particles();
         calc_acceleration(ppm); // 4.3.1.4
+        print_particles();
     }
 }
 

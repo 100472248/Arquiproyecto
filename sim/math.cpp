@@ -85,9 +85,9 @@ std::array<double, 3> increase_accerelation(double ppm, Particle pi, Particle pj
         double const d_j = pj.get_density();
         double const maximo = sqrt(std::max(v_abs, pow(TEN, -DOCE)));
         double const h_6 = pow(var_h, POT6);
-        aumento[0] = ((posi[0]-posj[0]) * (FTEEN/(N_PI * h_6)) * OPFIVE * masa * PS * (pow(var_h - maximo, 2) / maximo) * (d_i + d_j - 2 * R_0) + (v_i[0] + v_j[0]) * (FFIVE / (N_PI * h_6)) * masa * MU) / (d_i + d_j);
-        aumento[1] = ((posi[1]-posj[1]) * (FTEEN/(N_PI * h_6)) * OPFIVE * masa * PS * (pow(var_h - maximo, 2) / maximo) * (d_i + d_j - 2 * R_0) + (v_i[1] + v_j[1]) * (FFIVE / (N_PI * h_6)) * masa * MU) / (d_i + d_j);
-        aumento[2] = ((posi[2]-posj[2]) * (FTEEN/(N_PI * h_6)) * OPFIVE * masa * PS * (pow(var_h - maximo, 2) / maximo) * (d_i + d_j - 2 * R_0) + (v_i[2] + v_j[2]) * (FFIVE / (N_PI * h_6)) * masa * MU) / (d_i + d_j);}
+        aumento[0] = ((posi[0]-posj[0]) * (FTEEN/(N_PI * h_6)) * OPFIVE * masa * PS * (pow(var_h - maximo, 2) / maximo) * (d_i + d_j - 2 * R_0) + (v_j[0]- v_i[0]) * (FFIVE / (N_PI * h_6)) * masa * MU) / (d_i * d_j);
+        aumento[1] = ((posi[1]-posj[1]) * (FTEEN/(N_PI * h_6)) * OPFIVE * masa * PS * (pow(var_h - maximo, 2) / maximo) * (d_i + d_j - 2 * R_0) + (v_j[1] - v_i[1]) * (FFIVE / (N_PI * h_6)) * masa * MU) / (d_i * d_j);
+        aumento[2] = ((posi[2]-posj[2]) * (FTEEN/(N_PI * h_6)) * OPFIVE * masa * PS * (pow(var_h - maximo, 2) / maximo) * (d_i + d_j - 2 * R_0) + (v_j[2] - v_i[2]) * (FFIVE / (N_PI * h_6)) * masa * MU) / (d_i * d_j);}
     return aumento;}
 
 

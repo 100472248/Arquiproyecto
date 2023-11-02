@@ -23,6 +23,7 @@ int const FFIVE = 45;
 int const SFOUR = 64;
 int const TOFIVE = 315;
 double const OPFIVE = 1.5;
+
 double longitud_suavizado(double ppm);
 std::array<int,3> calc_n_blocks(double ppm);
 std::array<double, 3>calc_size_blocks(std::array<int,3> medidas_grid);
