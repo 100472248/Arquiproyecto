@@ -183,9 +183,9 @@ void Grid::simulation(int iteraciones, double ppm) {
         // std:: cout << "Hola" << i << '\n';
         calc_density(ppm); // 4.3.1.2 - 4.3.1.3
         calc_density_2(ppm);
-        calc_acceleration(ppm); // 4.3.1.4
-        print_particles();
+        calc_acceleration(ppm); // 4.3.1.4);
     }
+    print_particles();
 }
 
 std::array<double, 3> Grid::get_grid_size() const{
@@ -211,6 +211,37 @@ void Grid::uncheck() {
     }
 }
 
+void Grid::quicksort(std::vector<Particle>& particles, int start, int end) {
+    if (start < end) {
+        int pivot_index = (start + end) / 2;
+        int pivot = particles[pivot_index].get_id();
+        int i = start;
+        int j = end;
+
+        while (i <= j){
+            while (particles[i].get_id() < pivot) {
+                i++;
+            }
+            while (particles[j].get_id() > pivot) {
+                j--;
+            }
+            if (i <= j) {
+                Particle temp = particles[i];
+                particles[i] = particles[j];
+                particles[j] = temp;
+                i++;
+                j--;
+            }
+        }
+        if (start < j) {
+            quicksort(particles, start, j);
+        }
+        if (end > i) {
+            quicksort(particles, i, end);
+        }
+    }
+}
+
 std::vector<Particle> Grid::reordenar_particulas() {
     std::vector<Particle> particulas_reordenadas;
     for (int i = 0; i < static_cast<int>(bloques.size()); i++) {
@@ -219,17 +250,7 @@ std::vector<Particle> Grid::reordenar_particulas() {
             particulas_reordenadas.push_back(particula);
         }
     }
-    for (int k = 0; k < static_cast<int>(particulas_reordenadas.size()); k++) {
-        for (int var_l = 0; var_l < (static_cast<int>(particulas_reordenadas.size()) - k - 1); var_l++) {
-            Particle const particula = particulas_reordenadas[var_l];
-            Particle const siguiente = particulas_reordenadas[var_l + 1];
-            if (particula.get_id() > siguiente.get_id()) {
-                Particle const temp = particulas_reordenadas[var_l];
-                particulas_reordenadas[var_l] = particulas_reordenadas[var_l + 1];
-                particulas_reordenadas[var_l + 1] = temp;
-            }
-        }
-    }
+    quicksort(particulas_reordenadas, 0, static_cast<int>(particulas_reordenadas.size()) - 1);
     return particulas_reordenadas;
 }
 
@@ -237,7 +258,7 @@ void Grid::print_particles() {
     std::vector<Particle> const particulas = reordenar_particulas();
     int contador = 0;
     for (Particle particula: particulas) {
-        if (contador > MIL) {break;}
+        if (contador >= 4800) {break;}
         std::array<double, 3>  acceleration = particula.get_acceleration();
         std::vector<double> position = particula.get_position();
         std::cout << "Particle ID: " << particula.get_id() << '\n';

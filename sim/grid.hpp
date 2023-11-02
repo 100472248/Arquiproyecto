@@ -36,6 +36,7 @@ class Grid {
     std::vector<int> find_adjacent_blocks (int px, int py, int pz) const;
     void uncheck();
     std::array<double, 3> get_grid_size() const;
+    void quicksort(std::vector<Particle>& particles, int start, int end);
     std::vector<Particle> reordenar_particulas();
     void print_particles();
 
