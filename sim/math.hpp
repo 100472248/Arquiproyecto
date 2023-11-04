@@ -35,5 +35,11 @@ double update_acceleration(double new_position, double velocidad, int tipo, int 
 double increase_density(double ppm, std::vector <double> pi, std::vector <double> pj) ;
 double transform_density(double ppm, double Ri);
 void update_all (Particle particula);
+std::vector<double> uptdade_position (std::vector<double> pos_particle, std::vector<double> grad_particle, std::array<double, 3> acc_particle);
+std::vector<double> uptdade_velocity (std::vector<double> grad_particle, std::array<double, 3> acc_particle);
+std::vector<double> uptdade_gradient (std::vector<double> grad_particle, std::array<double, 3> acc_particle);
+void collisions_x(Particle &particula, int tipo);
+void collisions_y(Particle &particula, int tipo);
+void collisions_z(Particle &particula, int tipo);
 #endif //ARQUIPROYECTO_MATH_HPP
 

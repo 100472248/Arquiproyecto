@@ -6,7 +6,7 @@
 #include <utility>
 #include <vector>
 #include <array>
-
+#include <iostream>
 Particle::Particle(int id, std::vector<double> position,
                    std::vector<double> speed_gradient, std::vector<double> speed) :
                    m_id(id), m_position(std::move(position)), m_speed_gradient(std::move(speed_gradient)),
@@ -38,6 +38,7 @@ std::array<int, 3> Particle::get_bloque() {
 }
 
 std::vector<double> Particle::get_position() {
+    // std::cout << m_position[0] << m_position[1] << m_position[2] << "a ver" << "\n";
     return m_position;
 }
 

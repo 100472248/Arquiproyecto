@@ -33,17 +33,19 @@ int Block::get_particles_length() {
 }
 
 bool Block::needs_reset(int index, std::array<double, 3> block_size) {
+    //std::cout << "index " << index << std::endl;
+    //std::cout << "id " << particles[index].get_id() << std::endl;
     std::array<int, 3> bloque = particles[index].get_bloque();
+    //std::cout << "Bloque antiguo: " << bloque[0] << " " << bloque[1] << " " << bloque[2] << std::endl;
     std::vector<double> posicion = particles[index].get_position();
-    std:: array<int, 3> pos_particle = posicion_particula(posicion[0], posicion[1], posicion[2], block_size);
+    //std::cout << "Posicion: " << posicion[0] << " " << posicion[1] << " " << posicion[2] << std::endl;
+    std::array<int, 3> pos_particle = posicion_particula(posicion[0], posicion[1], posicion[2], block_size);
+    //std::cout << "Bloque nuevo: " << pos_particle[0] << " " << pos_particle[1] << " " << pos_particle[2] << std::endl;
     return bloque[0] != pos_particle[0] || bloque[1] != pos_particle[1] || bloque[2] != pos_particle[2];
-
 }
 
-Particle Block::pop_particle(int index) {
-    Particle particle =  particles[index];
+void Block::pop_particle(int index) {
     particles.erase(particles.begin() + index);
-    return particle;
 }
 
 void Block::initialize_acc_dens_block(std::array<double, 3> g) {
@@ -99,4 +101,47 @@ std::vector<double> Block::get_particle_speed(int pos) {
 
 std::array<double, 3> Block::get_particle_acc(int pos) {
     return particles[pos].get_acceleration();
+}
+
+void Block::set_particle_position(std::vector<double> position, int pos) {
+    particles[pos].set_position(position);
+}
+
+void Block::set_particle_speed(std::vector<double> speed, int pos) {
+    particles[pos].set_speed(speed);
+}
+
+void Block::set_particle_gradient(std::vector<double> gradient, int pos) {
+    particles[pos].set_gradient(gradient);
+}
+
+void Block::particle_collisions(int pos, int tipo, int coordenada) {
+    if (coordenada == 0) {
+        if (tipo == 0) {
+            collisions_x(particles[pos], tipo);
+        }
+        else if (tipo == 1) {
+            collisions_x(particles[pos], tipo);
+        }
+    }
+    else if (coordenada == 1) {
+        if (tipo == 0) {
+            collisions_y(particles[pos], tipo);
+        }
+        else if (tipo == 1) {
+            collisions_y(particles[pos], tipo);
+        }
+    }
+    else if (coordenada == 2) {
+        if (tipo == 0) {
+            collisions_z(particles[pos], tipo);
+        }
+        else if (tipo == 1) {
+            collisions_z(particles[pos], tipo);
+        }
+    }
+}
+
+int Block::get_particle_id(int pos) {
+    return particles[pos].get_id();
 }

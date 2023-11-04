@@ -49,6 +49,10 @@ class Grid {
     void collisions_y();
 
     void collisions_z();
+
+    void particle_movements();
+
+    void border_collisions();
 };
 
 #endif //ARQUIPROYECTO_GRID_HPP

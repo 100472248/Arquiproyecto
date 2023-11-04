@@ -46,9 +46,9 @@ int Read_particles(const std:: string& filename, Grid &malla, double ppm) {
     return num_id - 1;}
 
 std::vector<double> readSpeed(std::ifstream &archivo) {
-    float v_x = NAN;
-    float v_y = NAN;
-    float v_z = NAN;
+    float v_x;
+    float v_y;
+    float v_z;
     archivo.read(reinterpret_cast<char *>(&v_x), sizeof(float));
     archivo.read(reinterpret_cast<char *>(&v_y), sizeof(float));
     archivo.read(reinterpret_cast<char *>(&v_z), sizeof(float));
@@ -57,9 +57,9 @@ std::vector<double> readSpeed(std::ifstream &archivo) {
 }
 
 std::vector<double> readGradient(std::ifstream &archivo) {
-    float hvx = NAN;
-    float hvy = NAN;
-    float hvz = NAN;
+    float hvx;
+    float hvy;
+    float hvz;
     archivo.read(reinterpret_cast<char *>(&hvx), sizeof(float));
     archivo.read(reinterpret_cast<char *>(&hvy), sizeof(float));
     archivo.read(reinterpret_cast<char *>(&hvz), sizeof(float));
@@ -68,9 +68,9 @@ std::vector<double> readGradient(std::ifstream &archivo) {
 }
 
 std::vector<double> read_particle(std::ifstream &archivo) {
-    float p_x = NAN;
-    float p_y = NAN;
-    float p_z = NAN;
+    float p_x;
+    float p_y;
+    float p_z;
     archivo.read(reinterpret_cast<char *>(&p_x), sizeof(float));
     archivo.read(reinterpret_cast<char *>(&p_y), sizeof(float));
     archivo.read(reinterpret_cast<char *>(&p_z), sizeof(float));
