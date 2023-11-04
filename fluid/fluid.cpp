@@ -1,6 +1,5 @@
 #include <iostream>
 #include <vector>
-#include <string>
 #include <array>
 #include "../sim/progargs.hpp"
 #include "../sim/math.hpp"
@@ -26,6 +25,7 @@ int main(int argc, char* argv[]) {
   if (retorno != 0) {
       return retorno;}
   grid.simulation(stoi(argumentos[0]), datos_grid.ppm);
+  Write_particles(argumentos[2], grid);
   auto end_time = std::chrono::high_resolution_clock::now();
   // Calcula la duración de la ejecución
   auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);

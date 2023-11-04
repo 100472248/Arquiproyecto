@@ -1,15 +1,6 @@
 #include "files.hpp"
-
-
-
-
 #include <cmath>
-
 #include <fstream>
-#include <iostream>
-#include <string>
-#include <vector>
-#include <array>
 #include "math.hpp"
 #include "grid.hpp"
 #include "particle.hpp"
@@ -86,3 +77,28 @@ std::vector<double> read_particle(std::ifstream &archivo) {
     std:: vector <double> pos= {static_cast<double>(p_x), static_cast<double>(p_y), static_cast<double>(p_z)};
     return pos;
 }
+
+void Write_particles(std::string& archivo, Grid &malla) {
+    std::vector<Particle> const particulas = malla.reordenar_particulas();
+    int contador = 0;
+    std::ofstream outputFile(archivo);  // Abre el archivo de salida
+    if (outputFile.is_open()) {
+        for (Particle particula : particulas) {
+          if (contador >= 4800) { break; }
+          std::array<double, 3> acceleration = particula.get_acceleration();
+          std::vector<double> position = particula.get_position();
+          std::vector<double> gradient = particula.get_gradient();
+          std::vector<double> speed = particula.get_speed();
+          outputFile << "Particle ID: " << particula.get_id() << '\n';
+          outputFile << "Particle position: " << position[0] << " " << position[1] << " " << position[2] << '\n';
+          outputFile << "Particle speed: " << speed[0] << " " << speed[1] << " " << speed[2] << '\n';
+          outputFile << "Particle gradient: " << gradient[0] << " " << gradient[1] << " " << gradient[2] << '\n';
+          outputFile << "Particle acceleration: " << acceleration[0] << " " << acceleration[1] << " " << acceleration[2] << '\n';
+          outputFile << "Particle density: " << particula.get_density() << '\n';
+          contador++;
+        }
+        outputFile.close();  // Cierra el archivo de salida
+    }
+}
+
+

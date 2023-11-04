@@ -5,9 +5,7 @@
 #include "block.hpp"
 #include "particle.hpp"
 #include "math.hpp"
-#include <vector>
-#include <iostream>
-#include <array>
+#include <algorithm>
 
 Grid::Grid(int nx, int ny, int nz) : m_nx(nx), m_ny(ny), m_nz(nz) {
 
@@ -243,7 +241,6 @@ void Grid::simulation(int iteraciones, double ppm) {
         calc_acceleration(ppm); // 4.3.1.4
         particles_collisions();
     }
-    print_particles();
 }
 
 std::array<double, 3> Grid::get_grid_size() const{
@@ -308,7 +305,10 @@ std::vector<Particle> Grid::reordenar_particulas() {
             particulas_reordenadas.push_back(particula);
         }
     }
-    quicksort(particulas_reordenadas, 0, static_cast<int>(particulas_reordenadas.size()) - 1);
+    std::sort(particulas_reordenadas.begin(), particulas_reordenadas.end(),
+              [](const Particle& a, const Particle& b) {
+                return a.get_id() < b.get_id();
+              });
     return particulas_reordenadas;
 }
 
@@ -325,7 +325,6 @@ void Grid::print_particles() {
         std::cout << "Particle density: " << particula.get_density() << '\n';
         contador++;
     }
-
 }
 
 std::vector<int> Grid::get_border_x(int tipo) {
