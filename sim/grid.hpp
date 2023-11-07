@@ -27,9 +27,9 @@ class Grid {
     int find_block(int px, int py, int pz) const;
     void add_block_particle(int i, Particle &particle);
     int find_block_2(int px, int py, int pz) const;
-    std::vector<int> get_border_x(int tipo);
-    std::vector<int> get_border_y(int tipo);
-    std::vector<int> get_border_z(int tipo);
+    std::vector<int> get_border_x(int tipo) const;
+    std::vector<int> get_border_y(int tipo) const;
+    std::vector<int> get_border_z(int tipo) const;
     void particles_collisions();
     void initialize_acc_dens();
     void reposition_particles();

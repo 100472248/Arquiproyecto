@@ -47,7 +47,7 @@ int Grid::find_block_2(int px, int py, int pz) const {
 }
 
 void Grid::add_block_particle(int i, Particle &particle){
-    std::array<int, 3>  bloque = {bloques[i].get_i(), bloques[i].get_j(), bloques[i].get_k()};
+    std::array<int, 3>  const bloque = {bloques[i].get_i(), bloques[i].get_j(), bloques[i].get_k()};
     //std::cout << "Bloque: " << bloque[0] << " " << bloque[1] << " " << bloque[2] << std::endl;
     particle.Set_bloque(bloque);
     bloques[i].Add_particle(particle);
@@ -87,7 +87,7 @@ void Grid::reposition_particles() {
                 add_block_particle(identificador, particula);
             }
         }
-        for (int posicion: borrar) {
+        for (int const posicion: borrar) {
             bloques[i].pop_particle(posicion);
         }
     }
@@ -101,52 +101,37 @@ void Grid::initialize_acc_dens() {
 
 void Grid::calc_density(double ppm) {
     for (int i = 0; i < static_cast<int>(bloques.size()); i++) {
-        // std::cout << "Soy el bloque: " << i << " " << "mis coordenadas son: " << bloques[i].get_i() << " " << bloques[i].get_j() << " " << bloques[i].get_k() << std::endl;
         std::vector<int> const contiguos = find_adjacent_blocks(bloques[i].get_i(), bloques[i].get_j(),
                                                           bloques[i].get_k());
         int const longitud_particulas_bloque = bloques[i].get_particles_length();
-        // std::cout << "Soy el bloque: " << i << " " << "mi check es: " << bloques[i].get_checked() << std::endl;
-        //std::cout << "Tengo un total de: " << longitud_particulas_bloque << " particulas" << std::endl;
-        //std::cout << "Las posiciones de mis bloques contiguos son: " << std::endl;
-        //for (int posicion_contiguo2: contiguos) {
-            //std::cout << "posicion_contiguo: " << posicion_contiguo2 << std::endl;
-        //}
         for (int const posicion_contiguo: contiguos) {
-            //std::cout << "Soy el contiguo que tiene posicion: " << posicion_contiguo << " " << "mi check es: " << bloques[posicion_contiguo].get_checked() << std::endl;
             if (bloques[posicion_contiguo].get_checked()) {
-                continue;
-            }
+                continue;}
             int const longitud_particulas_contiguo = bloques[posicion_contiguo].get_particles_length();
-            //std::cout << "Tengo un total de: " << longitud_particulas_contiguo << " particulas" << std::endl;
-            for (int b = 0; b < longitud_particulas_bloque; b++) {
-                std::vector<double> const posicion_particula_bloque = bloques[i].get_particle_position(b);
-                //std::cout << "Soy la particula: " << b << " del bloque base" << std::endl;
-                for (int c = 0; c < longitud_particulas_contiguo; c++) {
-                    //std::cout << "Soy la particula: " << c << " del bloque contiguo" << std::endl;
-                    if (posicion_contiguo == i && c <= b ) {
-                        //std::cout << "AAAAAAAAAAAAAAAAAAAAAAAAAAAA" << std::endl;
+            for (int loop_var1 = 0; loop_var1 < longitud_particulas_bloque; loop_var1++) {
+                std::vector<double> const posicion_particula_bloque = bloques[i].get_particle_position(loop_var1);
+                for (int loop_var2 = 0; loop_var2 < longitud_particulas_contiguo; loop_var2++) {
+                    if (posicion_contiguo == i && loop_var2 <= loop_var1 ) {
                         continue;}
-                    std::vector<double> const posicion_particula_contiguo = bloques[posicion_contiguo].get_particle_position(c);
+                    std::vector<double> const posicion_particula_contiguo = bloques[posicion_contiguo].get_particle_position(loop_var2);
                     double const aumento = increase_density(ppm, posicion_particula_bloque, posicion_particula_contiguo);
-                    bloques[i].update_particle_density(aumento, b);
-                    bloques[posicion_contiguo].update_particle_density(aumento, c);
-                }
+                    bloques[i].update_particle_density(aumento, loop_var1);
+                    bloques[posicion_contiguo].update_particle_density(aumento, loop_var2);}
             }
         }
-        bloques[i].set_checked(true);
-    }
+        bloques[i].set_checked(true);}
     uncheck();
 }
 
 void Grid::calc_density_2(double ppm) {
     for (int i = 0; i < static_cast<int>(bloques.size()); i++) {
         int const longitud_particulas_bloque = bloques[i].get_particles_length();
-        for (int b = 0; b < longitud_particulas_bloque; b++) {
-            double const density = bloques[i].get_particle_density(b);
+        for (int loop_var = 0; loop_var < longitud_particulas_bloque; loop_var++) {
+            double const density = bloques[i].get_particle_density(loop_var);
             //std::cout << "densidad: " << density << std::endl;
             double const transformacion_bloque = transform_density(ppm, density);
             //std::cout << "transformacion: " << transformacion_bloque << std::endl;
-            bloques[i].set_particle_density(transformacion_bloque, b);
+            bloques[i].set_particle_density(transformacion_bloque, loop_var);
         }
     }
 }
@@ -156,31 +141,26 @@ void Grid::calc_acceleration(double ppm) {
         std::vector<int> const contiguos = find_adjacent_blocks(bloques[i].get_i(), bloques[i].get_j(),
                                                           bloques[i].get_k());
         int const longitud_particulas_bloque = bloques[i].get_particles_length();
-
         for (int const posicion_contiguo: contiguos) {
             if (bloques[posicion_contiguo].get_checked()) {
-                continue;
-            }
+                continue;}
             int const longitud_particulas_contiguo = bloques[posicion_contiguo].get_particles_length();
-            for (int b = 0; b < longitud_particulas_bloque; b++) {
-                std::vector<double> const posicion_particula_bloque = bloques[i].get_particle_position(b);
-                for (int c = 0; c < longitud_particulas_contiguo; c++) {
-                    if (posicion_contiguo == i && c <= b) {continue;}
-                    std::vector<double> const posicion_particula_contiguo = bloques[posicion_contiguo].get_particle_position(c);
+            for (int loop_var1 = 0; loop_var1 < longitud_particulas_bloque; loop_var1++) {
+                std::vector<double> const posicion_particula_bloque = bloques[i].get_particle_position(loop_var1);
+                for (int loop_var2 = 0; loop_var2 < longitud_particulas_contiguo; loop_var2++) {
+                    if (posicion_contiguo == i && loop_var2 <= loop_var1) {continue;}
+                    std::vector<double> const posicion_particula_contiguo = bloques[posicion_contiguo].get_particle_position(loop_var2);
                     // estas particulas son copias, no se estan actualizando
-                    Particle const particula_bloque = bloques[i].get_particle(b);
-                    Particle const particula_contiguo = bloques[posicion_contiguo].get_particle(c);
+                    Particle const particula_bloque = bloques[i].get_particle(loop_var1);
+                    Particle const particula_contiguo = bloques[posicion_contiguo].get_particle(loop_var2);
                     std::array<double, 3> aumento = increase_accerelation(ppm, particula_bloque, particula_contiguo);
-                    bloques[i].update_particle_acceleration(aumento, b);
+                    bloques[i].update_particle_acceleration(aumento, loop_var1);
                     aumento = {-aumento[0], -aumento[1], -aumento[2]};
-                    bloques[posicion_contiguo].update_particle_acceleration(aumento, c);
-                }
+                    bloques[posicion_contiguo].update_particle_acceleration(aumento, loop_var2);}
             }
         }
-        bloques[i].set_checked(true);
-    }
-    uncheck();
-}
+        bloques[i].set_checked(true);}
+    uncheck();}
 
 void Grid::particles_collisions() {
     collisions_x();
@@ -190,15 +170,15 @@ void Grid::particles_collisions() {
 
 void Grid::collisions_z() {
     for (int i = 0; i <= 1; i++) {
-        std::vector<int> border_positions = get_border_z(i);
-        for (int posicion: border_positions) {
-            int longitud_particulas_bloque = bloques[posicion].get_particles_length();
-            for (int b = 0; b < longitud_particulas_bloque; b++) {
-                double new_p = new_position(bloques[posicion].get_particle_position(b)[2],
-                                     bloques[posicion].get_particle_gradient(b)[2]);
-                double aumento = update_acceleration(new_p, bloques[posicion].get_particle_speed(b)[2],
+        std::vector<int> const border_positions = get_border_z(i);
+        for (int const posicion: border_positions) {
+            int const longitud_particulas_bloque = bloques[posicion].get_particles_length();
+            for (int loop_var = 0; loop_var < longitud_particulas_bloque; loop_var++) {
+                double const new_p = new_position(bloques[posicion].get_particle_position(loop_var)[2],
+                                     bloques[posicion].get_particle_gradient(loop_var)[2]);
+                double const aumento = update_acceleration(new_p, bloques[posicion].get_particle_speed(loop_var)[2],
                                               i, 2);
-                bloques[posicion].update_particle_acceleration({0, 0, aumento}, b);
+                bloques[posicion].update_particle_acceleration({0, 0, aumento}, loop_var);
             }
         }
     }
@@ -206,15 +186,15 @@ void Grid::collisions_z() {
 
 void Grid::collisions_y() {
     for (int i = 0; i <= 1; i++) {
-        std::vector<int> border_positions = get_border_y(i);
-        for (int posicion: border_positions) {
-            int longitud_particulas_bloque = bloques[posicion].get_particles_length();
-            for (int b = 0; b < longitud_particulas_bloque; b++) {
-                double new_p = new_position(bloques[posicion].get_particle_position(b)[1],
-                                     bloques[posicion].get_particle_gradient(b)[1]);
-                double aumento = update_acceleration(new_p, bloques[posicion].get_particle_speed(b)[1],
+        std::vector<int> const border_positions = get_border_y(i);
+        for (int const posicion: border_positions) {
+            int const longitud_particulas_bloque = bloques[posicion].get_particles_length();
+            for (int loop_var = 0; loop_var < longitud_particulas_bloque; loop_var++) {
+                double const new_p = new_position(bloques[posicion].get_particle_position(loop_var)[1],
+                                     bloques[posicion].get_particle_gradient(loop_var)[1]);
+                double const aumento = update_acceleration(new_p, bloques[posicion].get_particle_speed(loop_var)[1],
                                               i, 1);
-                bloques[posicion].update_particle_acceleration({0, aumento, 0}, b);
+                bloques[posicion].update_particle_acceleration({0, aumento, 0}, loop_var);
             }
         }
     }
@@ -222,16 +202,16 @@ void Grid::collisions_y() {
 
 void Grid::collisions_x() {
     for (int i = 0; i <= 1; i++) {
-        std::vector<int> border_positions = get_border_x(i);
-        for (int posicion: border_positions) {
-            int longitud_particulas_bloque = bloques[posicion].get_particles_length();
-            for (int b = 0; b < longitud_particulas_bloque; b++) {
-                double new_p = new_position(bloques[posicion].get_particle_position(b)[0],
-                                     bloques[posicion].get_particle_gradient(b)[0]);
-                double aumento = update_acceleration(new_p, bloques[posicion].get_particle_speed(b)[0],
+        std::vector<int> const border_positions = get_border_x(i);
+        for (int const posicion: border_positions) {
+            int const longitud_particulas_bloque = bloques[posicion].get_particles_length();
+            for (int loop_var = 0; loop_var < longitud_particulas_bloque; loop_var++) {
+                double const new_p = new_position(bloques[posicion].get_particle_position(loop_var)[0],
+                                     bloques[posicion].get_particle_gradient(loop_var)[0]);
+                double const aumento = update_acceleration(new_p, bloques[posicion].get_particle_speed(loop_var)[0],
                                               i, 0);
                 // std::cout << "aumento: " << aumento << std::endl;
-                bloques[posicion].update_particle_acceleration({aumento, 0, 0}, b);
+                bloques[posicion].update_particle_acceleration({aumento, 0, 0}, loop_var);
             }
         }
     }
@@ -239,62 +219,48 @@ void Grid::collisions_x() {
 
 void Grid::particle_movements() {
     for (int i = 0; i < static_cast<int>(bloques.size()); i++) {
-        // std::cout << "bloques.size: " << static_cast<int>(bloques.size()) << std::endl;
         int const longitud_particulas_bloque = bloques[i].get_particles_length();
-        //std::cout << "Soy el bloque" << i << std::endl;
-        //std::cout << "Tengo este numero de particulas: " << longitud_particulas_bloque << std::endl;
-        for (int b = 0; b < longitud_particulas_bloque; b++) {
-            //std::cout << "Soy la particula: " << b << std::endl;
-            std::vector<double> gradient = bloques[i].get_particle_gradient(b);
-            std::vector<double> position = bloques[i].get_particle_position(b);
-            std::array<double, 3> acceleration = bloques[i].get_particle_acc(b);
-            //std::cout << "Datos obtenidos" << std::endl;
-            //std::cout << "Posicion de la particula: " << position[0] << " " << position[1] << " " << position[2] << std::endl;
-            std::vector<double> new_position = uptdade_position(position, gradient, acceleration);
-            //std::cout << "Posicion calculada: " << new_position[0] << " " << new_position[1] << " " << new_position[2] << "id: " << bloques[i].get_particle_id(b) << std::endl;
-            std::vector<double> new_speed = uptdade_velocity(gradient, acceleration);
-            //std::cout << "velocidad calculada" << std::endl;
-            std::vector<double> new_gradient = uptdade_gradient(gradient, acceleration);
-            //std::cout << "gradiente calculado" << std::endl;
-            bloques[i].set_particle_position(new_position, b);
-            //std::cout << "Posicion actualizada" << std::endl;
-            bloques[i].set_particle_speed(new_speed, b);
-            //std::cout << "velocidad actualizada" << std::endl;
-            bloques[i].set_particle_gradient(new_gradient, b);
-            //std::cout << "gradiente actualizado" << std::endl;
+        for (int var_loop = 0; var_loop < longitud_particulas_bloque; var_loop++) {
+            std::vector<double> const gradient = bloques[i].get_particle_gradient(var_loop);
+            std::vector<double> const position = bloques[i].get_particle_position(var_loop);
+            std::array<double, 3> const acceleration = bloques[i].get_particle_acc(var_loop);
+            std::vector<double> const new_position = uptdade_position(position, gradient, acceleration);
+            std::vector<double> const new_speed = uptdade_velocity(gradient, acceleration);
+            std::vector<double> const new_gradient = uptdade_gradient(gradient, acceleration);
+            bloques[i].set_particle_position(new_position, var_loop);
+            bloques[i].set_particle_speed(new_speed, var_loop);
+            bloques[i].set_particle_gradient(new_gradient, var_loop);
         }
     }
 }
 
 void Grid::border_collisions() {
     for (int i = 0; i <= 1; i++) {
-        std::vector<int> border_positions = get_border_x(i);
-        for (int posicion: border_positions) {
-            int longitud_particulas_bloque = bloques[posicion].get_particles_length();
-            for (int b = 0; b < longitud_particulas_bloque; b++) {
-                bloques[posicion].particle_collisions(b, i, 0);
-            }
+        std::vector<int> const border_positions = get_border_x(i);
+        for (int const posicion: border_positions) {
+            int const longitud_particulas_bloque = bloques[posicion].get_particles_length();
+            for (int var_loop = 0; var_loop < longitud_particulas_bloque; var_loop++) {
+                bloques[posicion].particle_collisions(var_loop, i, 0);}
         }
     }
     for (int i = 0; i <= 1; i++) {
-        std::vector<int> border_positions = get_border_y(i);
-        for (int posicion: border_positions) {
-            int longitud_particulas_bloque = bloques[posicion].get_particles_length();
-            for (int b = 0; b < longitud_particulas_bloque; b++) {
-                bloques[posicion].particle_collisions(b, i, 1);
-            }
+        std::vector<int> const border_positions = get_border_y(i);
+        for (int const posicion: border_positions) {
+            int const longitud_particulas_bloque = bloques[posicion].get_particles_length();
+            for (int var_loop = 0; var_loop < longitud_particulas_bloque; var_loop++) {
+                bloques[posicion].particle_collisions(var_loop, i, 1);}
         }
     }
     for (int i = 0; i <= 1; i++) {
-        std::vector<int> border_positions = get_border_z(i);
-        for (int posicion: border_positions) {
-            int longitud_particulas_bloque = bloques[posicion].get_particles_length();
-            for (int b = 0; b < longitud_particulas_bloque; b++) {
-                bloques[posicion].particle_collisions(b, i, 2);
-            }
+        std::vector<int> const border_positions = get_border_z(i);
+        for (int const posicion: border_positions) {
+            int const longitud_particulas_bloque = bloques[posicion].get_particles_length();
+            for (int var_loop = 0; var_loop < longitud_particulas_bloque; var_loop++) {
+                bloques[posicion].particle_collisions(var_loop, i, 2);}
         }
     }
 }
+
 void Grid::simulation(int iteraciones, double ppm) {
     // std:: cout << "Hola" << '\n';
     for (int i = 0; i < iteraciones; i++) {
@@ -346,32 +312,26 @@ void Grid::uncheck() {
 
 void Grid::quicksort(std::vector<Particle>& particles, int start, int end) {
     if (start < end) {
-        int pivot_index = (start + end) / 2;
-        int pivot = particles[pivot_index].get_id();
-        int i = start;
-        int j = end;
+        int const pivot_index = (start + end) / 2;
+        int const pivot = particles[pivot_index].get_id();
+        int inicio = start;
+        int final = end;
 
-        while (i <= j){
-            while (particles[i].get_id() < pivot) {
-                i++;
-            }
-            while (particles[j].get_id() > pivot) {
-                j--;
-            }
-            if (i <= j) {
-                Particle temp = particles[i];
-                particles[i] = particles[j];
-                particles[j] = temp;
-                i++;
-                j--;
-            }
-        }
-        if (start < j) {
-            quicksort(particles, start, j);
-        }
-        if (end > i) {
-            quicksort(particles, i, end);
-        }
+        while (inicio <= final){
+            while (particles[inicio].get_id() < pivot) {
+                inicio++;}
+            while (particles[final].get_id() > pivot) {
+                final--;}
+            if (inicio <= final) {
+                Particle const temp = particles[inicio];
+                particles[inicio] = particles[final];
+                particles[final] = temp;
+                inicio++;
+                final--;}}
+        if (start < final) {
+            quicksort(particles, start, final);}
+        if (end > inicio) {
+            quicksort(particles, inicio, end);}
     }
 }
 
@@ -405,7 +365,7 @@ void Grid::print_particles() {
     }
 }
 
-std::vector<int> Grid::get_border_x(int tipo) {
+std::vector<int> Grid::get_border_x(int tipo) const {
     if (tipo != 0 && tipo != 1) {
         return {-1};
     }
@@ -419,7 +379,7 @@ std::vector<int> Grid::get_border_x(int tipo) {
     return posiciones;
 }
 
-std::vector<int> Grid::get_border_y(int tipo) {
+std::vector<int> Grid::get_border_y(int tipo) const {
     if (tipo != 0 && tipo != 1) {
         return {-1};
     }
@@ -433,7 +393,7 @@ std::vector<int> Grid::get_border_y(int tipo) {
     return posiciones;
 }
 
-std::vector<int> Grid::get_border_z(int tipo) {
+std::vector<int> Grid::get_border_z(int tipo) const {
     if (tipo != 0 && tipo != 1) {
         return {-1};
     }
@@ -446,13 +406,3 @@ std::vector<int> Grid::get_border_z(int tipo) {
     }
     return posiciones;
 }
-
-
-
-
-/*
-bool Grid::is_adjacent(int b1_i, int b1_j, int b1_k, int b2_i, int b2_j, int b2_k) {
-    return ((abs(b2_i - b1_i) == 1 || abs(b2_i - b1_i) == 0) && (abs(b2_j - b1_j) == 1 || abs(b2_j - b1_j) == 0)
-    && (abs(b2_k - b1_k) == 1 || abs(b2_k - b1_k) == 0));
-}
-*/

@@ -2,6 +2,8 @@
 // Created by jaime-vaquero on 2/10/23.
 //
 #include "block.hpp"
+
+#include <utility>
 #include "particle.hpp"
 #include "math.hpp"
 
@@ -104,15 +106,15 @@ std::array<double, 3> Block::get_particle_acc(int pos) {
 }
 
 void Block::set_particle_position(std::vector<double> position, int pos) {
-    particles[pos].set_position(position);
+    particles[pos].set_position(std::move(position));
 }
 
 void Block::set_particle_speed(std::vector<double> speed, int pos) {
-    particles[pos].set_speed(speed);
+    particles[pos].set_speed(std::move(speed));
 }
 
 void Block::set_particle_gradient(std::vector<double> gradient, int pos) {
-    particles[pos].set_gradient(gradient);
+    particles[pos].set_gradient(std::move(gradient));
 }
 
 void Block::particle_collisions(int pos, int tipo, int coordenada) {
