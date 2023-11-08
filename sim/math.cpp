@@ -1,6 +1,8 @@
 #include <cmath>
 #include "math.hpp"
 
+#include <math.h>
+
 #include "grid.hpp"
 #include "particle.hpp"
 /*Calculamos la longitud de suavizado. Notese que, h al ser una variable global declarada en el archivo header,
@@ -156,21 +158,21 @@ std::vector<double> uptdade_gradient (std::vector<double> grad_particle, std::ar
 }
 
 void collisions_x(Particle &particula, int tipo) {
-    double d = 0;
+    double var_x = NAN;
     std::vector<double> position_part = particula.get_position();
     std::vector<double> gradient_part = particula.get_gradient();
     std::vector<double> speed_part = particula.get_speed();
     if (tipo == 0) {
-        d = position_part[0] - BMIN[0];
-        if (d < 0) {
-            particula.set_position({BMIN[0]-d, position_part[1], position_part[2]});
+        var_x = position_part[0] - BMIN[0];
+        if (var_x < 0) {
+            particula.set_position({BMIN[0] - var_x, position_part[1], position_part[2]});
             particula.set_gradient({-gradient_part[0], gradient_part[1], gradient_part[2]});
             particula.set_speed({-speed_part[0], speed_part[1], speed_part[2]});
         }
     } else if (tipo == 1) {
-        d = BMAX[0] - position_part[0];
-        if (d < 0) {
-            particula.set_position({BMAX[0]+d, position_part[1], position_part[2]});
+        var_x = BMAX[0] - position_part[0];
+        if (var_x < 0) {
+            particula.set_position({BMAX[0] + var_x, position_part[1], position_part[2]});
             particula.set_gradient({-gradient_part[0], gradient_part[1], gradient_part[2]});
             particula.set_speed({-speed_part[0], speed_part[1], speed_part[2]});
         }
@@ -178,21 +180,21 @@ void collisions_x(Particle &particula, int tipo) {
 }
 
 void collisions_y(Particle &particula, int tipo) {
-    double d = 0;
+    double var_y = NAN;
     std::vector<double> position_part = particula.get_position();
     std::vector<double> gradient_part = particula.get_gradient();
     std::vector<double> speed_part = particula.get_speed();
     if (tipo == 0) {
-        d = position_part[1] - BMIN[1];
-        if (d < 0) {
-            particula.set_position({position_part[0], BMIN[1] - d, position_part[2]});
+        var_y = position_part[1] - BMIN[1];
+        if (var_y < 0) {
+            particula.set_position({position_part[0], BMIN[1] - var_y, position_part[2]});
             particula.set_gradient({gradient_part[0], -gradient_part[1], gradient_part[2]});
             particula.set_speed({speed_part[0], -speed_part[1], speed_part[2]});
         }
     } else if (tipo == 1) {
-            d = BMAX[1] - position_part[1];
-            if (d < 0) {
-                particula.set_position({position_part[0], BMAX[1] + d, position_part[2]});
+        var_y = BMAX[1] - position_part[1];
+            if (var_y < 0) {
+                particula.set_position({position_part[0], BMAX[1] + var_y, position_part[2]});
                 particula.set_gradient({gradient_part[0], -gradient_part[1], gradient_part[2]});
                 particula.set_speed({speed_part[0], -speed_part[1], speed_part[2]});
             }
@@ -200,22 +202,22 @@ void collisions_y(Particle &particula, int tipo) {
 }
 
 void collisions_z(Particle &particula, int tipo) {
-    double d = 0;
+    double var_z = NAN;
     std::vector<double> position_part = particula.get_position();
     std::vector<double> gradient_part = particula.get_gradient();
     std::vector<double> speed_part = particula.get_speed();
     if (tipo == 0) {
-        d = position_part[2] - BMIN[2];
-        if (d < 0) {
-            particula.set_position({position_part[0], position_part[1], BMIN[2]-d});
+        var_z = position_part[2] - BMIN[2];
+        if (var_z < 0) {
+            particula.set_position({position_part[0], position_part[1], BMIN[2] - var_z});
             particula.set_gradient({gradient_part[0], gradient_part[1], -gradient_part[2]});
             particula.set_speed({speed_part[0], speed_part[1], -speed_part[2]});
             }
     }
     else if (tipo == 1) {
-        d = BMAX[2] - position_part[2];
-        if (d < 0) {
-            particula.set_position({position_part[0], position_part[1], BMAX[2]+d});
+        var_z = BMAX[2] - position_part[2];
+        if (var_z < 0) {
+            particula.set_position({position_part[0], position_part[1], BMAX[2] + var_z});
             particula.set_gradient({gradient_part[0], gradient_part[1], -gradient_part[2]});
             particula.set_speed({speed_part[0], speed_part[1], -speed_part[2]});
         }

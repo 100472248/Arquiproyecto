@@ -24,12 +24,12 @@ class Grid {
     void set_block_size(std::array<double, 3> block_size);
     std::array<double, 3> get_block_size();
     void Generate_blocks(int nx, int ny, int nz);
-    int find_block(int px, int py, int pz) const;
+    [[nodiscard]] int find_block(int px, int py, int pz) const;
     void add_block_particle(int i, Particle &particle);
-    int find_block_2(int px, int py, int pz) const;
-    std::vector<int> get_border_x(int tipo) const;
-    std::vector<int> get_border_y(int tipo) const;
-    std::vector<int> get_border_z(int tipo) const;
+    [[nodiscard]] int find_block_2(int px, int py, int pz) const;
+    [[nodiscard]] std::vector<int> get_border_x(int tipo) const;
+    [[nodiscard]] std::vector<int> get_border_y(int tipo) const;
+    [[nodiscard]] std::vector<int> get_border_z(int tipo) const;
     void particles_collisions();
     void initialize_acc_dens();
     void reposition_particles();
@@ -37,10 +37,8 @@ class Grid {
     void calc_density_2(double ppm);
     void calc_acceleration(double ppm);
     void simulation(int iteraciones, double ppm);
-    std::vector<int> find_adjacent_blocks (int px, int py, int pz) const;
+    [[nodiscard]] std::vector<int> find_adjacent_blocks (int px, int py, int pz) const;
     void uncheck();
-    std::array<double, 3> get_grid_size() const;
-    void quicksort(std::vector<Particle>& particles, int start, int end);
     std::vector<Particle> reordenar_particulas();
     void print_particles();
 

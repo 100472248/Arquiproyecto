@@ -28,7 +28,7 @@ CheckOptions:
 
 WarningsAsErrors: '*'
 
-HeaderFileExtensions: [ '', 'hpp' ]
+# HeaderFileExtensions: [ '', 'hpp' ]
 
 FormatStyle: file
 

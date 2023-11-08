@@ -51,9 +51,9 @@ void Block::pop_particle(int index) {
 }
 
 void Block::initialize_acc_dens_block(std::array<double, 3> g) {
-    for (int i = 0; i < static_cast<int>(particles.size()); i++) {
-        particles[i].Set_acceleration(g);
-        particles[i].Set_density(0);
+    for (auto & particle : particles) {
+        particle.Set_acceleration(g);
+        particle.Set_density(0);
     }
 
 }
@@ -139,8 +139,7 @@ void Block::particle_collisions(int pos, int tipo, int coordenada) {
             collisions_z(particles[pos], tipo);
         }
         else if (tipo == 1) {
-            collisions_z(particles[pos], tipo);
-        }
+            collisions_z(particles[pos], tipo);}
     }
 }
 

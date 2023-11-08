@@ -5,8 +5,8 @@ add_library(sim
         math.cpp
         files.cpp
         particle.cpp
-        new_math.hpp
-        new_math.cpp
 )
+# new_math.hpp
 # Use this line only if you have dependencies from stim to GSL
-target_link_libraries (sim PRIVATE Microsoft.GSL::GSL)
+target_include_directories(sim PUBLIC ..)
+target_link_libraries(sim PRIVATE Microsoft.GSL::GSL)

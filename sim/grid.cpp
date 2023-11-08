@@ -72,13 +72,13 @@ std::vector<int> Grid::find_adjacent_blocks(int px, int py, int pz) const {
 }
 
 void Grid::reposition_particles() {
-    for (int i = 0; i < static_cast<int>(bloques.size()); i++) {
+    for (auto & bloque : bloques) {
         std::vector<int> borrar;
-        int const particles = bloques[i].get_particles_length();
+        int const particles = bloque.get_particles_length();
         // std::cout << "Soy el bloque " << i << "tengo estas particulas: " << particles << std::endl;
         for (int j = 0; j <particles; j++) {
-            if (bloques[i].needs_reset(j, get_block_size())) {
-                Particle particula = bloques[i].get_particle(j);
+            if (bloque.needs_reset(j, get_block_size())) {
+                Particle particula = bloque.get_particle(j);
                 borrar.insert(borrar.begin(), j);
                 std::vector<double> position_particle = particula.get_position();
                 std::array<int, 3> pos_particle = posicion_particula(position_particle[0], position_particle[1],
@@ -88,14 +88,14 @@ void Grid::reposition_particles() {
             }
         }
         for (int const posicion: borrar) {
-            bloques[i].pop_particle(posicion);
+            bloque.pop_particle(posicion);
         }
     }
 }
 
 void Grid::initialize_acc_dens() {
-    for (int i = 0; i < static_cast<int>(bloques.size()); i++) {
-        bloques[i].initialize_acc_dens_block(G);
+    for (auto & bloque : bloques) {
+        bloque.initialize_acc_dens_block(G);
     }
 }
 
@@ -124,14 +124,14 @@ void Grid::calc_density(double ppm) {
 }
 
 void Grid::calc_density_2(double ppm) {
-    for (int i = 0; i < static_cast<int>(bloques.size()); i++) {
-        int const longitud_particulas_bloque = bloques[i].get_particles_length();
+    for (auto & bloque : bloques) {
+        int const longitud_particulas_bloque = bloque.get_particles_length();
         for (int loop_var = 0; loop_var < longitud_particulas_bloque; loop_var++) {
-            double const density = bloques[i].get_particle_density(loop_var);
+            double const density = bloque.get_particle_density(loop_var);
             //std::cout << "densidad: " << density << std::endl;
             double const transformacion_bloque = transform_density(ppm, density);
             //std::cout << "transformacion: " << transformacion_bloque << std::endl;
-            bloques[i].set_particle_density(transformacion_bloque, loop_var);
+            bloque.set_particle_density(transformacion_bloque, loop_var);
         }
     }
 }
@@ -218,18 +218,18 @@ void Grid::collisions_x() {
 }
 
 void Grid::particle_movements() {
-    for (int i = 0; i < static_cast<int>(bloques.size()); i++) {
-        int const longitud_particulas_bloque = bloques[i].get_particles_length();
+    for (auto & bloque : bloques) {
+        int const longitud_particulas_bloque = bloque.get_particles_length();
         for (int var_loop = 0; var_loop < longitud_particulas_bloque; var_loop++) {
-            std::vector<double> const gradient = bloques[i].get_particle_gradient(var_loop);
-            std::vector<double> const position = bloques[i].get_particle_position(var_loop);
-            std::array<double, 3> const acceleration = bloques[i].get_particle_acc(var_loop);
+            std::vector<double> const gradient = bloque.get_particle_gradient(var_loop);
+            std::vector<double> const position = bloque.get_particle_position(var_loop);
+            std::array<double, 3> const acceleration = bloque.get_particle_acc(var_loop);
             std::vector<double> const new_position = uptdade_position(position, gradient, acceleration);
             std::vector<double> const new_speed = uptdade_velocity(gradient, acceleration);
             std::vector<double> const new_gradient = uptdade_gradient(gradient, acceleration);
-            bloques[i].set_particle_position(new_position, var_loop);
-            bloques[i].set_particle_speed(new_speed, var_loop);
-            bloques[i].set_particle_gradient(new_gradient, var_loop);
+            bloque.set_particle_position(new_position, var_loop);
+            bloque.set_particle_speed(new_speed, var_loop);
+            bloque.set_particle_gradient(new_gradient, var_loop);
         }
     }
 }
@@ -287,14 +287,6 @@ void Grid::simulation(int iteraciones, double ppm) {
     //print_particles();
 }
 
-std::array<double, 3> Grid::get_grid_size() const{
-    std::array<double, 3> grid_size;
-    grid_size[0] = m_nx;
-    grid_size[1] = m_ny;
-    grid_size[2] = m_nz;
-    return grid_size;
-}
-
 std::array<double, 3> Grid::get_block_size() {
     return m_block_size;
 }
@@ -305,41 +297,16 @@ void Grid::set_block_size(std::array<double, 3> block_size) {
 }
 
 void Grid::uncheck() {
-    for (int i  = 0; i < static_cast<int>(bloques.size()); i++) {
-        bloques[i].set_checked(false);
-    }
-}
-
-void Grid::quicksort(std::vector<Particle>& particles, int start, int end) {
-    if (start < end) {
-        int const pivot_index = (start + end) / 2;
-        int const pivot = particles[pivot_index].get_id();
-        int inicio = start;
-        int final = end;
-
-        while (inicio <= final){
-            while (particles[inicio].get_id() < pivot) {
-                inicio++;}
-            while (particles[final].get_id() > pivot) {
-                final--;}
-            if (inicio <= final) {
-                Particle const temp = particles[inicio];
-                particles[inicio] = particles[final];
-                particles[final] = temp;
-                inicio++;
-                final--;}}
-        if (start < final) {
-            quicksort(particles, start, final);}
-        if (end > inicio) {
-            quicksort(particles, inicio, end);}
+    for (auto & bloque : bloques) {
+        bloque.set_checked(false);
     }
 }
 
 std::vector<Particle> Grid::reordenar_particulas() {
     std::vector<Particle> particulas_reordenadas;
-    for (int i = 0; i < static_cast<int>(bloques.size()); i++) {
-        for (int j = 0; j < bloques[i].get_particles_length(); j++) {
-            Particle const particula  =bloques[i].get_particle(j);
+    for (auto & bloque : bloques) {
+        for (int j = 0; j < bloque.get_particles_length(); j++) {
+            Particle const particula  =bloque.get_particle(j);
             particulas_reordenadas.push_back(particula);
         }
     }
